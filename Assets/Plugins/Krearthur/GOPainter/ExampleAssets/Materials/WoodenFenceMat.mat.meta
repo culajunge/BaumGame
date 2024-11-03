@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 566821d3f92c6494ab4a9123d2392512
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Materials/WoodenFenceMat.mat
+  uploadId: 656493

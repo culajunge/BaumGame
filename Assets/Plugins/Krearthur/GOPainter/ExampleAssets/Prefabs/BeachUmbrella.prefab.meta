@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: bd8af8f73f6acde4590ecab958f6e6ad
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Prefabs/BeachUmbrella.prefab
+  uploadId: 656493

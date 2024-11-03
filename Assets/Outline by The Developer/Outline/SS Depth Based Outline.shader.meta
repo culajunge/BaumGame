@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 065803456599c8349af208624b748e56
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 180370
+  packageName: Outlines
+  packageVersion: 1.0
+  assetPath: Assets/Outline by The Developer/Outline/SS Depth Based Outline.shader
+  uploadId: 395384

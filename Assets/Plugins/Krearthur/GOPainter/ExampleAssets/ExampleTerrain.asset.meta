@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ce496392a06425f42a3d536561e89385
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 15600000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/ExampleTerrain.asset
+  uploadId: 656493

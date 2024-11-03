@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: c5d9c1200bc34e742a516182abb96fbd
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Prefabs/LowPolyCloud.prefab
+  uploadId: 656493

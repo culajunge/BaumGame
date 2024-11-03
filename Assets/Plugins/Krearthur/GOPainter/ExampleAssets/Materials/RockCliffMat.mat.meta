@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5d863a5a32fdbe3418d472fd79fae8b4
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Materials/RockCliffMat.mat
+  uploadId: 656493

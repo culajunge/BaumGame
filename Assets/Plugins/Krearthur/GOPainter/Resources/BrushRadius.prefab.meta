@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5d617e0fea841164da3e248d22da977d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/Resources/BrushRadius.prefab
+  uploadId: 656493

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e1c58761d345afe4482e73e099ee3422
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Prefabs/LowPolyRockCliff.prefab
+  uploadId: 656493

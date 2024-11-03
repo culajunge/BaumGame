@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 79f00eb615b8a52469522bfc077631d2
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Prefabs/Grass.prefab
+  uploadId: 656493

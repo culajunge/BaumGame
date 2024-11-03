@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 8359b068932191441bd8e5b5e8789183
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 180370
+  packageName: Outlines
+  packageVersion: 1.0
+  assetPath: Assets/Outline by The Developer/Example Scene/Example Scene/O_ReviewCam.cs
+  uploadId: 395384

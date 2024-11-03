@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 5c11f4ab849016741a77888aacfb0208
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Prefabs/Palm.prefab
+  uploadId: 656493

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 75618d909021779459e801ac4e248f35
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/Utils/Factory/LineFactory.cs
+  uploadId: 656493

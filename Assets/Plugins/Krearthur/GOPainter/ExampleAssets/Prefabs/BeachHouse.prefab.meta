@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 510e03d3969c6ca4a8d139ea3d02bd03
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/ExampleAssets/Prefabs/BeachHouse.prefab
+  uploadId: 656493

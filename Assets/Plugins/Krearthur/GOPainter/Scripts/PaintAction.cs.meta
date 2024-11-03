@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 720f4ecbf3de1164fb32f5a21b1ea058
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 175756
+  packageName: GO Painter
+  packageVersion: 1.5
+  assetPath: Assets/Plugins/Krearthur/GOPainter/Scripts/PaintAction.cs
+  uploadId: 656493
