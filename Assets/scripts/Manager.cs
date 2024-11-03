@@ -115,7 +115,7 @@ public class Manager : MonoBehaviour
         Destroy(currentBuildingPreview);
         RelinquishFromBuildingPlacement();
     }
-
+    //this is a test change for git
     void RelinquishFromTreePlacement()
     {
         placingTree = false;
