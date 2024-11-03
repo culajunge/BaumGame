@@ -730,6 +730,67 @@
                   </llm>
                 </llm>
               </chat>
+              <chat>
+                <internalId value="dd08577a-b633-4f74-918b-88722f34b8bc" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="bfe66be2-e647-4ba2-b4a7-b723a7a9f69e" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+                <messages>
+                  <list>
+                    <message>
+                      <speaker value="HUMAN" />
+                      <text value="I want to commit this unity project to vcs git in jetbrains rider. So I ennabled vcs and selected git. then I added a remote github repo and so on. I wanted to commit and push everything, and it worked but it didnt commit everything, only some seemingly randomly chosen files were commited and pushed. I cant do another commit because according to the program all files are commited and pushed, though the majority is missing. If I click on a specific file and click commit I get into the commit panel, but the file is just not there. How can I commit and push all my files?" />
+                    </message>
+                    <message>
+                      <speaker value="ASSISTANT" />
+                      <text value="It sounds like you're experiencing an issue with Git not recognizing all the files in your Unity project. This can happen due to a few reasons:&#10;&#10;1. Git ignore rules: Unity projects typically come with a .gitignore file that excludes certain files and folders from version control. This is usually intentional to avoid committing large binary files or temporary files.&#10;&#10;2. Git cache: Sometimes Git's cache can get out of sync with the actual file system.&#10;&#10;3. Large file size: Git has limitations on file sizes, and some Unity assets might exceed these limits.&#10;&#10;To resolve this and commit all your files, try the following steps:&#10;&#10;1. Check your .gitignore file:&#10;   Open the .gitignore file in your project root and make sure it's not excluding files you want to commit. You might need to modify it if necessary.&#10;&#10;2. Reset Git's cache:&#10;   Open a terminal in your project directory and run:&#10;   ```&#10;   git rm -r --cached .&#10;   git add .&#10;   ```&#10;   This removes all files from Git's index and re-adds them, which can help Git recognize new files.&#10;&#10;3. Force add all files:&#10;   If the above doesn't work, you can try forcing Git to add all files:&#10;   ```&#10;   git add -A&#10;   ```&#10;&#10;4. Check for large files:&#10;   If you have large files (over 100MB), Git might refuse to add them. In this case, you might need to use Git LFS (Large File Storage).&#10;&#10;5. Commit and push:&#10;   After adding the files, commit and push:&#10;   ```&#10;   git commit -m &quot;Add all project files&quot;&#10;   git push origin main&#10;   ```&#10;&#10;6. Use Rider's UI:&#10;   After performing these steps, refresh Rider's Git panel. You should now see all the files ready to be committed.&#10;&#10;7. If issues persist:&#10;   Try closing and reopening Rider, or even restarting your computer. Sometimes this can resolve sync issues between the IDE and Git.&#10;&#10;Remember, it's generally a good practice not to commit certain Unity-generated files and folders (like /Library, /Temp, and /Logs). Make sure your .gitignore file is properly set up for a Unity project.&#10;&#10;If you're still having issues after trying these steps, you might want to consider reinitializing your Git repository or cloning a fresh copy of your project and manually copying over your changes." />
+                    </message>
+                  </list>
+                </messages>
+                <updatedAt value="2024-11-03T18:45:23.0344186" />
+              </chat>
             </list>
           </chats>
           <defaultLlm>
