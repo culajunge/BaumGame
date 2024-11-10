@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treeName: Spruce Tree
   treePreview: {fileID: 21300000, guid: 16aba82ea6624f8459bddf274a461cae, type: 3}
-  amount: 0
+  amount: 100
   treeOBJ: {fileID: 7966913831241365189, guid: b80e39276b876a74dbf3b11b526b4a1d, type: 3}
   growFactor: 1
   growLimit: 1.2

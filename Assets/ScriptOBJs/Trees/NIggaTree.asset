@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treeName: Nigga Tree
   treePreview: {fileID: 21300000, guid: 6c5f53f2cf148c744b5c38fdccf5bb7f, type: 3}
-  amount: 0
+  amount: 100
   treeOBJ: {fileID: 4639631329756897603, guid: 986150541b372764689716bcc1e34d27, type: 3}
   growFactor: 1.5
   growLimit: 2.5

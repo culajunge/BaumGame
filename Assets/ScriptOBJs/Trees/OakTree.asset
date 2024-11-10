@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treeName: Oaktree
   treePreview: {fileID: 21300000, guid: 41eae2ac96bbe624794ab29db8bc2655, type: 3}
-  amount: 0
+  amount: 100
   treeOBJ: {fileID: 1165240524117972384, guid: a9a2c2962f09a7d4f8f29057a4f2010c, type: 3}
   growFactor: 2
   growLimit: 1.5

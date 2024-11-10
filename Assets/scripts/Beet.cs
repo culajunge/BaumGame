@@ -68,13 +68,6 @@ public class Beet : MonoBehaviour
     {
         if (trees.Count > 0)
         {
-            /*
-            foreach (TreeBehavior tree in trees)
-            {
-                if(tree == null) continue;
-                tree.OnDismantle();
-            }*/
-
             for (int i = trees.Count - 1; i >= 0; i--)
             {
                 trees[i].OnDismantle();
