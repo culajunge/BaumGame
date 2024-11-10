@@ -59,17 +59,26 @@ public class Beet : MonoBehaviour
         isWaterShortage();
     }
 
-    public void RemoveTree(int index)
+    public void RemoveTree(TreeBehavior tree)
     {
-        trees[index] = null;
+        trees.Remove(tree);
     }
 
     public void OnDismantle()
     {
-        foreach (TreeBehavior tree in trees)
+        if (trees.Count > 0)
         {
-            if(tree == null) continue;
-            tree.OnDismantle();
+            /*
+            foreach (TreeBehavior tree in trees)
+            {
+                if(tree == null) continue;
+                tree.OnDismantle();
+            }*/
+
+            for (int i = trees.Count - 1; i >= 0; i--)
+            {
+                trees[i].OnDismantle();
+            }
         }
         
         beetConnector.OnDismantle();

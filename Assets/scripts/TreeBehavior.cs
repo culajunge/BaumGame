@@ -33,9 +33,9 @@ public class TreeBehavior : MonoBehaviour
     public void OnDismantle()
     {
         map map = GameObject.FindFirstObjectByType<map>();
-        map.RemoveTree(treeIndex);
+        map.RemoveTree(gameObject);
         
-        beet.RemoveTree(treeBeetIndex);
+        beet.RemoveTree(this);
         
         Destroy(gameObject);
     }

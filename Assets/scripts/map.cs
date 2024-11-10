@@ -34,15 +34,15 @@ public class map : MonoBehaviour
         beetsList.Add(beet);
     }
 
-    public void RemoveTree(int id)
+    public void RemoveTree(GameObject tree)
     {
-        treesList[id] = null;
-        treeIDs[id] = -1;
+        treesList.Remove(tree);
+        treeIDs.Remove(treesList.IndexOf(tree));
     }
 
-    public void RemoveBuilding(int id)
+    public void RemoveBuilding(GameObject building)
     {
-        buildingsList[id] = null;
+        buildingsList.Remove(building);
     }
 
     public void RemoveBeet(int id)

@@ -22,7 +22,7 @@ public class Building : MonoBehaviour
     public virtual void OnDismantle()
     {
         map map = GameObject.FindFirstObjectByType<map>();
-        map.RemoveBuilding(buildingIndex);
+        map.RemoveBuilding(gameObject);
         
         GameObject.FindFirstObjectByType<Manager>().PaybackBuilding(buildingID);
         
