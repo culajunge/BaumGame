@@ -6,8 +6,10 @@ public class map : MonoBehaviour
 {
     
     [Header("Refs")]
+    [SerializeField] Terrain terrain;
     [SerializeField] Manager manager;
     [SerializeField] dayNightCycle dayNightCycle;
+    [SerializeField] public SplineInterface splineInterface;
     
     List<GameObject> treesList = new List<GameObject>();
     List<int> treeIDs = new List<int>();
@@ -73,6 +75,37 @@ public class map : MonoBehaviour
             if(beet == null) continue;
             beet.GrowTrees();
         }
+    }
+
+    public Vector3 GetTerrainNormal(Vector3 worldPos)
+    {
+        Terrain terrain = Terrain.activeTerrain;
+        TerrainData terrainData = terrain.terrainData;
+    
+        // Convert world position to terrain space
+        Vector3 terrainPosition = terrain.transform.InverseTransformPoint(worldPos);
+    
+        // Get normalized position within terrain
+        float normX = terrainPosition.x / terrainData.size.x;
+        float normZ = terrainPosition.z / terrainData.size.z;
+    
+        // Get terrain normal at this position
+        Vector3 normal = terrainData.GetInterpolatedNormal(normX, normZ);
+    
+        return normal;
+    }
+
+    public float GetTerrainHeight(Vector3 worldPos)
+    {
+        Terrain terrain = Terrain.activeTerrain;
+    
+        // Convert world position to terrain local position
+        Vector3 terrainLocalPos = worldPos - terrain.transform.position;
+    
+        // Get the height at the specified position
+        float height = terrain.SampleHeight(terrainLocalPos);
+    
+        return height;
     }
 
     public int GetNextBuildingIndex()

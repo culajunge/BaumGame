@@ -10,7 +10,8 @@ public class Manager : MonoBehaviour
     [Header("Refs")] [SerializeField] UIBehavior ui;
     [SerializeField] Camera cam;
     [SerializeField] public indexer indexer;
-    [SerializeField] map map;
+    [SerializeField] public map map;
+    [SerializeField] public ConnectionManager connecManager;
 
     [Header("Tags")] [SerializeField] const string treeTag = "Tree";
     [SerializeField] const string grassTag = "Grass";
@@ -44,6 +45,12 @@ public class Manager : MonoBehaviour
     private bool collectingO2 = true;
     private bool dismantling = false;
     private bool placingPath = false;
+
+    bool GetMouseDownOnMap()
+    {
+        return Input.GetMouseButtonDown(0) && UnityEngine.EventSystems.EventSystem.current != null &&
+               !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+    }
 
 
     void Start()
@@ -145,12 +152,12 @@ public class Manager : MonoBehaviour
         if (needContninuousRaycast)
         {
             r = cam.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(r, out hit)) return;
-        }else if (Input.GetMouseButtonDown(0))
+        }else if (GetMouseDownOnMap())
         {
             r = cam.ScreenPointToRay(Input.mousePosition);
-            if (!Physics.Raycast(r, out hit)) return;
         }
+        
+        if (!Physics.Raycast(r, out hit)) return;
         
         if (placingTree)
         {
@@ -166,6 +173,9 @@ public class Manager : MonoBehaviour
         if (dismantling)
         {
             HandleDismantling(hit);
+        }else if (placingPath)
+        {
+            HandlePathPlacement(hit);
         }
         else if (!ui.camMov.GetMovementLock())
         {
@@ -176,7 +186,7 @@ public class Manager : MonoBehaviour
     void HandleTreePlacement(RaycastHit hit)
     {
         currentTreePreview.transform.position = hit.point;
-        if (Input.GetMouseButtonDown(0) && !hit.transform.CompareTag(treeTag) && hit.transform.CompareTag(beetTag))
+        if (GetMouseDownOnMap() && !hit.transform.CompareTag(treeTag) && hit.transform.CompareTag(beetTag))
         {
             PlaceTree();
 
@@ -193,10 +203,68 @@ public class Manager : MonoBehaviour
     void HandleBuildingPlacement(RaycastHit hit)
     {
         currentBuildingPreview.transform.position = hit.point;
-        if (Input.GetMouseButtonDown(0) && hit.transform.CompareTag(groundTag))
+        if (GetMouseDownOnMap() && hit.transform.CompareTag(groundTag))
         {
             PlaceBuilding();
         }
+    }
+
+    BucketBoys connecBB;
+    Beet connecBeet;
+    void HandlePathPlacement(RaycastHit hit)
+    {
+        if (GetMouseDownOnMap()) //TODO do some tag detection so no paths in weird places ig
+        {
+            GameObject dbgobj = new GameObject();
+            Transform tf = dbgobj.transform;
+            tf.position = hit.point;
+            tf.eulerAngles = map.GetTerrainNormal(hit.point);
+            bool offset = false;
+            bool autoExit = false;
+            
+            
+            if (hit.collider.gameObject.TryGetComponent<Building>(out Building bd))
+            {
+                hit.point = bd.GetNearestPathConnector(hit.point).position;
+                bd.OnPathConnect();
+                
+                autoExit = true;
+
+                if (hit.collider.gameObject.TryGetComponent<BucketBoys>(out BucketBoys bb))
+                {
+                    connecBB = bb;
+                }
+            }else if (hit.collider.gameObject.TryGetComponent<Beet>(out Beet bt))
+            {
+                hit.point = bt.beetConnector.GetNearestPathConnector(hit.point).position;
+                bt.beetConnector.OnPathConnect();
+                connecBeet = bt;
+                autoExit = true;
+            }
+            else
+            {
+                print("NOTHING SPECIAL HERE");
+                offset = true;
+            }
+            
+            //map.splineInterface.AddSplineOrKnot(tf.position, tf.eulerAngles, offset: offset);
+            int splineID = map.splineInterface.AddSplineOrKnot(hit.point, map.GetTerrainNormal(hit.point), offset: offset);
+
+            if (connecBeet != null && connecBB != null)
+            {
+                connecManager.AddConnectionWB(splineID, connecBeet, connecBB);
+                connecBeet = null;
+                connecBB = null;
+            }
+
+            //if(autoExit) ExitPathModeAuto();
+        }
+    }
+
+    void ExitPathModeAuto()
+    {
+        OnPathPlaceMode(false);
+        ui.ShowOnly(ui.screens[0]);
     }
 
     void HandleDismantling(RaycastHit hit)
@@ -220,6 +288,7 @@ public class Manager : MonoBehaviour
 
     void HandleOtherClickInteractions(RaycastHit hit)
     {
+        if(hit.transform == null)return;
         if (hit.transform.CompareTag(grassTag))
         {
             int id = hit.collider.gameObject.GetComponent<GrassBehavior>().OnCollect();
@@ -257,6 +326,13 @@ public class Manager : MonoBehaviour
     public void OnPathPlaceMode(bool val)
     {
         placingPath = val;
+        map.splineInterface.OnPathPlaceMode(val);
+
+        if (!val)
+        {
+            connecBeet = null;
+            connecBB = null;
+        }
     }
 
     public void PaybackBuilding(int id)

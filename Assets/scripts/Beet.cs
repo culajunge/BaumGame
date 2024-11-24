@@ -6,7 +6,7 @@ public class Beet : MonoBehaviour
 {
     Manager manager;
     List<TreeBehavior> trees = new List<TreeBehavior>();
-    int waterinput = 0;
+    public bool enoughWater = false;
     [HideInInspector] public BeetConnector beetConnector;
     
     [SerializeField] GameObject waterShortageInformer;
@@ -19,10 +19,8 @@ public class Beet : MonoBehaviour
 
     public bool isWaterShortage()
     {
-        bool shortage = waterinput < GetWaterDemand();
-        waterShortageInformer.SetActive(shortage);
-        print($"Water shortage: {shortage}");
-        return shortage;
+        waterShortageInformer.SetActive(!enoughWater);
+        return !enoughWater;
     }
 
     public void GrowTrees()

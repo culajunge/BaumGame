@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 5412686394468447789}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.085, z: 2.198}
+  m_LocalPosition: {x: -0, y: 0.085, z: 1.676}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -403,14 +403,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d4d19bd982ffe074b8f8370ad4c91851, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5636664422173383386}
+      addedObject: {fileID: -8169330475611647224}
   m_SourcePrefab: {fileID: 100100000, guid: d4d19bd982ffe074b8f8370ad4c91851, type: 3}
 --- !u!1 &6198458252872288731 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d4d19bd982ffe074b8f8370ad4c91851, type: 3}
   m_PrefabInstance: {fileID: 6540406577886114954}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5636664422173383386
+--- !u!114 &-8169330475611647224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -419,11 +419,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6198458252872288731}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9aa07211c2ccaed4fb1635789f02a13e, type: 3}
+  m_Script: {fileID: 11500000, guid: f19a65387d637974fbd8dcd401a1c0e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pathConnectors:
   - {fileID: 1299408014930058831}
+  buildingIndex: 0
+  buildingID: 0
+  waterOutput: 10
 --- !u!4 &6723461223355700065 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d4d19bd982ffe074b8f8370ad4c91851, type: 3}

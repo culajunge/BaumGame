@@ -10,7 +10,7 @@ public class UIBehavior : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] public cameraMovement camMov;
-    [SerializeField] private GameObject[] screens;
+    [SerializeField] public GameObject[] screens;
     [SerializeField] private PostProcessVolume ppVolume;
     [SerializeField] private indexer indexer;
     
