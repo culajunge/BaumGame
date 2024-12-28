@@ -63,6 +63,7 @@
     <Compile Include="Assets\scripts\Simple Billboard Renderer.cs" />
     <Compile Include="Assets\scripts\dayNightCycle.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\FreeCam.cs" />
+    <Compile Include="Assets\scripts\Mannequin.cs" />
     <Compile Include="Assets\Outline by The Developer\Example Scene\Example Scene\O_ReviewCam.cs" />
     <Compile Include="Assets\scripts\SplineInterface.cs" />
     <Compile Include="Assets\scripts\UIBehavior.cs" />
@@ -968,10 +969,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{2bb91c15-7d9e-7b12-bed9-6adf3d9e2a32}</Project>
-      <Name>Assembly-CSharp-firstpass</Name>
-    </ProjectReference>
     <ProjectReference Include="Unity.Splines.Examples.csproj">
       <Project>{ef8918f7-a731-40f3-f5e8-93fd912caff9}</Project>
       <Name>Unity.Splines.Examples</Name>

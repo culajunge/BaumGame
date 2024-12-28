@@ -9,10 +9,12 @@ public class ConnectionManager : MonoBehaviour
     public void AddConnectionWB(int splineID, Beet beet, BucketBoys bucketBoys)
     {
         // Check if connection already exists, then add
+        print($"Bouta create new connection, connecs List elngth: {connectionsWB.Count}");
         foreach (ConnectionWaterBeet connection in connectionsWB)
         {
             if (connection.splineID == splineID)
             {
+                print("Existing spline connection found");
                 connection.beets.Add(beet);
                 connection.bucketBoys.Add(bucketBoys);
                 return;
@@ -26,6 +28,7 @@ public class ConnectionManager : MonoBehaviour
         connectionsWB.Add(newConnection);
         
         CalculateWaterFlow();
+        print("Added Connection");
     }
 
     public int GetWaterOutput(ConnectionWaterBeet connection)
@@ -36,6 +39,7 @@ public class ConnectionManager : MonoBehaviour
         {
             waterOutput += bb.WaterOutput;
         }
+        print($"waterOutput: {waterOutput}");
         return waterOutput;
     }
 
@@ -47,6 +51,7 @@ public class ConnectionManager : MonoBehaviour
         {
             waterConsumption += beet.GetWaterDemand();
         }
+        print($"waterConsumption: {waterConsumption}");
         return waterConsumption;
     }
 
@@ -60,6 +65,7 @@ public class ConnectionManager : MonoBehaviour
             foreach (Beet beet in connection.beets)
             {
                  beet.enoughWater = waterOutput >= waterConsumption;
+                 print($"Enozugh water: {beet.enoughWater}");
             }
 
         }

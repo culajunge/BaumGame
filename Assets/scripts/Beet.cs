@@ -17,7 +17,7 @@ public class Beet : MonoBehaviour
         tag = manager.GetBeetTag();
     }
 
-    public bool isWaterShortage()
+    public bool IsWaterShortage()
     {
         waterShortageInformer.SetActive(!enoughWater);
         return !enoughWater;
@@ -25,7 +25,7 @@ public class Beet : MonoBehaviour
 
     public void GrowTrees()
     {
-        if(isWaterShortage()) return;
+        if(IsWaterShortage()) return;
 
         foreach (TreeBehavior tree in trees)
         {
@@ -54,7 +54,7 @@ public class Beet : MonoBehaviour
     {
         trees.Add(treeBehavior);
         treeBehavior.treeBeetIndex = GetLastTreeIndex();
-        isWaterShortage();
+        IsWaterShortage();
     }
 
     public void RemoveTree(TreeBehavior tree)

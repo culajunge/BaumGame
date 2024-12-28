@@ -12,6 +12,7 @@ TagManager:
   - Beet
   - Stump
   - BucketBoys
+  - Building
   layers:
   - Default
   - TransparentFX

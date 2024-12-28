@@ -203,7 +203,7 @@ public class Manager : MonoBehaviour
     void HandleBuildingPlacement(RaycastHit hit)
     {
         currentBuildingPreview.transform.position = hit.point;
-        if (GetMouseDownOnMap() && hit.transform.CompareTag(groundTag))
+        if (GetMouseDownOnMap() && hit.transform.CompareTag(groundTag) && !hit.transform.CompareTag(buildingTag))
         {
             PlaceBuilding();
         }

@@ -12,6 +12,12 @@ public class Building : MonoBehaviour
     public virtual void OnPlaceDown()
     {
         print("On PlaceDown");
+        ToggleIgnoreRaycastLayer(false);
+    }
+    
+    void ToggleIgnoreRaycastLayer(bool ignore)
+    {
+        gameObject.layer = ignore ? 2 : 0;
     }
 
     public void SetID(int id)
