@@ -5,7 +5,9 @@ using UnityEngine.UI;
 using TMPro;
 
 public class UITreeItem : MonoBehaviour
-{
+{   
+    //Hello im hal and im resposible for the ui
+
     [SerializeField] private Image preview;
     [SerializeField] public TMP_Text amount;
     [HideInInspector] public Sprite previewImg;
