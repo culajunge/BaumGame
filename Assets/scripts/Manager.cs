@@ -145,20 +145,21 @@ public class Manager : MonoBehaviour
     private Ray r;
     private RaycastHit hit;
     private bool needContninuousRaycast = false;
-    
+
     void Update()
     {
         needContninuousRaycast = placingTree || placingBuilding;
         if (needContninuousRaycast)
         {
             r = cam.ScreenPointToRay(Input.mousePosition);
-        }else if (GetMouseDownOnMap())
+        }
+        else if (GetMouseDownOnMap())
         {
             r = cam.ScreenPointToRay(Input.mousePosition);
         }
-        
+
         if (!Physics.Raycast(r, out hit)) return;
-        
+
         if (placingTree)
         {
             HandleTreePlacement(hit);
@@ -167,13 +168,14 @@ public class Manager : MonoBehaviour
         {
             HandleBuildingPlacement(hit);
         }
-        
-        if (!Input.GetMouseButtonDown(0))return;
+
+        if (!Input.GetMouseButtonDown(0)) return;
 
         if (dismantling)
         {
             HandleDismantling(hit);
-        }else if (placingPath)
+        }
+        else if (placingPath)
         {
             HandlePathPlacement(hit);
         }
@@ -211,6 +213,7 @@ public class Manager : MonoBehaviour
 
     BucketBoys connecBB;
     Beet connecBeet;
+
     void HandlePathPlacement(RaycastHit hit)
     {
         if (GetMouseDownOnMap()) //TODO do some tag detection so no paths in weird places ig
@@ -221,44 +224,72 @@ public class Manager : MonoBehaviour
             tf.eulerAngles = map.GetTerrainNormal(hit.point);
             bool offset = false;
             bool autoExit = false;
-            
-            
+
+
+            int connectToSplineIndex = -2;
+
             if (hit.collider.gameObject.TryGetComponent<Building>(out Building bd))
             {
                 hit.point = bd.GetNearestPathConnector(hit.point).position;
                 bd.OnPathConnect();
-                
+
                 autoExit = true;
 
                 if (hit.collider.gameObject.TryGetComponent<BucketBoys>(out BucketBoys bb))
                 {
                     connecBB = bb;
                 }
-            }else if (hit.collider.gameObject.TryGetComponent<Beet>(out Beet bt))
+            }
+            else if (hit.collider.gameObject.TryGetComponent<Beet>(out Beet bt))
             {
                 hit.point = bt.beetConnector.GetNearestPathConnector(hit.point).position;
                 bt.beetConnector.OnPathConnect();
                 connecBeet = bt;
                 autoExit = true;
             }
+            else if (hit.collider.transform.CompareTag(pathTag))
+            {
+                int splineIndex = GetSplineIdFromHit(hit);
+                var hitSpline = map.splineInterface.splineMesh.LoftSplines[splineIndex];
+                connectToSplineIndex = splineIndex;
+            }
             else
             {
-                print("NOTHING SPECIAL HERE");
+                print($"Debug hit {hit.transform.name}, Tag: {hit.transform.tag}");
                 offset = true;
             }
-            
-            //map.splineInterface.AddSplineOrKnot(tf.position, tf.eulerAngles, offset: offset);
-            int splineID = map.splineInterface.AddSplineOrKnot(hit.point, map.GetTerrainNormal(hit.point), offset: offset);
 
+
+            //map.splineInterface.AddSplineOrKnot(tf.position, tf.eulerAngles, offset: offset);
+            int splineID =
+                map.splineInterface.AddSplineOrKnot(hit.point, map.GetTerrainNormal(hit.point), offset: offset,
+                    connectToSplineIndex: connectToSplineIndex);
+
+            /*
             if (connecBeet != null && connecBB != null)
             {
                 connecManager.AddConnectionWB(splineID, connecBeet, connecBB);
                 connecBeet = null;
                 connecBB = null;
-            }
+            }*/
 
+            Destroy(dbgobj);
             //if(autoExit) ExitPathModeAuto();
         }
+    }
+
+    int GetSplineIdFromHit(RaycastHit hit)
+    {
+        int triangleIndex = hit.triangleIndex;
+        int splineIndex = map.splineInterface.splineMesh.GetSplineIndexFromTriangle(triangleIndex);
+
+        if (splineIndex >= 0)
+        {
+            Debug.Log($"Hit spline index: {splineIndex.ToString()}");
+            return splineIndex;
+        }
+
+        return -1;
     }
 
     void ExitPathModeAuto()
@@ -284,11 +315,17 @@ public class Manager : MonoBehaviour
         {
             obj.GetComponent<Beet>().OnDismantle();
         }
+        else if (tag == pathTag)
+        {
+            Debug.LogError("Cannot dismantle path (yet)");
+            //TODO ID independent path dismantling, and handle mannequin behavior upon dismantled spline
+            map.splineInterface.RemoveSplineSilent(GetSplineIdFromHit(hit));
+        }
     }
 
     void HandleOtherClickInteractions(RaycastHit hit)
     {
-        if(hit.transform == null)return;
+        if (hit.transform == null) return;
         if (hit.transform.CompareTag(grassTag))
         {
             int id = hit.collider.gameObject.GetComponent<GrassBehavior>().OnCollect();

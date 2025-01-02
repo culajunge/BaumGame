@@ -65,7 +65,7 @@ public class ConnectionManager : MonoBehaviour
             foreach (Beet beet in connection.beets)
             {
                  beet.enoughWater = waterOutput >= waterConsumption;
-                 print($"Enozugh water: {beet.enoughWater}");
+                 //print($"Water Output: {waterOutput}, Water Consumption: {waterConsumption}, Enough Water: {beet.enoughWater}");
             }
 
         }

@@ -13,6 +13,7 @@ TagManager:
   - Stump
   - BucketBoys
   - Building
+  - Path
   layers:
   - Default
   - TransparentFX

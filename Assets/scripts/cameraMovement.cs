@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class cameraMovement : MonoBehaviour
 {
-    public float baseDragSpeed = 2.0f;        // Speed of the camera movement
-    public float maxSpeedMultiplier = 3.0f;  // Maximum speed multiplier
-    public float smoothSpeed = 0.125f;    // Smoothing speed for interpolation
-    public float zoomSpeed = 5.0f;        // Speed of zooming
-    public float minZoom = 15.0f;         // Minimum field of view (zoom in limit)
-    public float maxZoom = 60.0f;         // Maximum field of view (zoom out limit)
+    public float baseDragSpeed = 2.0f; // Speed of the camera movement
+    public float maxSpeedMultiplier = 3.0f; // Maximum speed multiplier
+    public float smoothSpeed = 0.125f; // Smoothing speed for interpolation
+    public float zoomSpeed = 5.0f; // Speed of zooming
+    public float minZoom = 15.0f; // Minimum field of view (zoom in limit)
+    public float maxZoom = 60.0f; // Maximum field of view (zoom out limit)
 
-    private Vector3 dragOrigin;           // Where the dragging started
+    private Vector3 dragOrigin; // Where the dragging started
     private bool isDragging = false;
-    private Vector3 targetPosition;       // The position to smoothly move towards
+    private Vector3 targetPosition; // The position to smoothly move towards
     private float currentDragSpeed;
 
     [SerializeField] private Camera cam;
-    [SerializeField] private Transform camDir;   // Reference to the camera's direction object
-    private Vector3 zoom;  // Zoom reference variable
+    [SerializeField] private Transform camDir; // Reference to the camera's direction object
+    private Vector3 zoom; // Zoom reference variable
     bool lockedMovement = false;
+
     public void SetMovementLock(bool val)
     {
         lockedMovement = val;
@@ -32,8 +33,8 @@ public class cameraMovement : MonoBehaviour
 
     void Start()
     {
-        targetPosition = transform.position;  // Initialize target position
-        zoom = camDir.localPosition;  // Initialize zoom with the local position of the camera direction
+        targetPosition = transform.position; // Initialize target position
+        zoom = camDir.localPosition; // Initialize zoom with the local position of the camera direction
         UpdateDragSpeed();
     }
 
@@ -46,12 +47,13 @@ public class cameraMovement : MonoBehaviour
             HandleZoom();
         }
     }
-    
+
     void UpdateDragSpeed()
     {
-        float zoomFactor = Mathf.InverseLerp(minZoom, maxZoom, Vector3.Distance(camDir.localPosition, transform.position));
+        float zoomFactor =
+            Mathf.InverseLerp(minZoom, maxZoom, Vector3.Distance(camDir.localPosition, transform.position));
         currentDragSpeed = Mathf.Lerp(baseDragSpeed, baseDragSpeed * maxSpeedMultiplier, zoomFactor);
-        
+
         //print($"Speed: {currentDragSpeed} \n ZoomFac: {zoomFactor}");
     }
 
@@ -67,7 +69,7 @@ public class cameraMovement : MonoBehaviour
 
     void HandleUniversalInput()
     {
-        if (Input.touchCount == 1)  // Touch input
+        if (Input.touchCount == 1) // Touch input
         {
             Touch touch = Input.GetTouch(0);
 
@@ -81,7 +83,7 @@ public class cameraMovement : MonoBehaviour
                 Vector3 dragDelta = touch.position - (Vector2)dragOrigin;
 
                 Vector3 move = new Vector3(-dragDelta.x, 0, -dragDelta.y) * currentDragSpeed * Time.deltaTime;
-                targetPosition += move;  // Add the movement to the target position
+                targetPosition += move; // Add the movement to the target position
 
                 dragOrigin = touch.position;
             }
@@ -90,7 +92,7 @@ public class cameraMovement : MonoBehaviour
                 isDragging = false;
             }
         }
-        else if (Input.GetMouseButtonDown(0))  // Mouse input (left-click)
+        else if (Input.GetMouseButtonDown(0)) // Mouse input (left-click)
         {
             dragOrigin = Input.mousePosition;
             isDragging = true;
@@ -100,7 +102,7 @@ public class cameraMovement : MonoBehaviour
             Vector3 dragDelta = Input.mousePosition - dragOrigin;
 
             Vector3 move = new Vector3(-dragDelta.x, 0, -dragDelta.y) * currentDragSpeed * Time.deltaTime;
-            targetPosition += move;  // Add the movement to the target position
+            targetPosition += move; // Add the movement to the target position
 
             dragOrigin = Input.mousePosition;
         }
@@ -144,12 +146,12 @@ public class cameraMovement : MonoBehaviour
             float deltaMagnitudeDiff = prevTouchDeltaMag - currentTouchDeltaMag;
 
             // Zoom based on pinch gesture
-            Zoom(deltaMagnitudeDiff * 0.01f);  // Adjust multiplier for sensitivity
+            Zoom(deltaMagnitudeDiff * 0.01f); // Adjust multiplier for sensitivity
         }
     }
 
     // Method to handle zooming
-    void Zoom(float increment)
+    void Zoom(float increment, bool touch = false)
     {
         zoom += cam.transform.forward * increment * zoomSpeed;
         camDir.localPosition = zoom;

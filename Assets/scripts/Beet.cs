@@ -10,6 +10,26 @@ public class Beet : MonoBehaviour
     [HideInInspector] public BeetConnector beetConnector;
     
     [SerializeField] GameObject waterShortageInformer;
+
+    private int water = 0;
+    private int waterDemand = 0;
+    public int GetWater()
+    {
+        return water;
+    }
+
+    public void AddWater(int amount)
+    {
+        water += amount;
+    }
+
+    bool ConsumeWater(int amount)
+    {
+        if(amount > water) return false;
+        
+        water -= amount;
+        return true;
+    }
     public void OnPlaceDown()
     {
         manager = GameObject.FindFirstObjectByType<Manager>();
@@ -19,6 +39,8 @@ public class Beet : MonoBehaviour
 
     public bool IsWaterShortage()
     {
+        enoughWater = water >= waterDemand;
+        
         waterShortageInformer.SetActive(!enoughWater);
         return !enoughWater;
     }
@@ -26,6 +48,7 @@ public class Beet : MonoBehaviour
     public void GrowTrees()
     {
         if(IsWaterShortage()) return;
+        if(!ConsumeWater(waterDemand)) return;
 
         foreach (TreeBehavior tree in trees)
         {
@@ -54,7 +77,8 @@ public class Beet : MonoBehaviour
     {
         trees.Add(treeBehavior);
         treeBehavior.treeBeetIndex = GetLastTreeIndex();
-        IsWaterShortage();
+        //IsWaterShortage();
+        waterDemand = GetWaterDemand();
     }
 
     public void RemoveTree(TreeBehavior tree)
