@@ -93,8 +93,9 @@ public class SplineInterface : MonoBehaviour
                     iterations: splineConnectionIterations
                 );
 
-                // Calculate the index where to insert the new knot based on the t value
-                int insertIndex = Mathf.FloorToInt(t * splineToConnect.Count);
+                // Find the correct segment index for insertion
+                int segmentCount = splineToConnect.Count - 1;
+                int insertIndex = Mathf.Clamp(Mathf.CeilToInt(t * segmentCount), 0, segmentCount);
 
                 // Create knot at intersection point on target spline
                 BezierKnot connectionKnot = new BezierKnot(nearest);
@@ -109,15 +110,14 @@ public class SplineInterface : MonoBehaviour
 
                 splineContainer.LinkKnots(currentKnotIndex, targetKnotIndex);
 
-                //Add intersection collider
-                /*
                 intersectionCollider intersectionCol =
                     Instantiate(intersectionColliderPrefab, nearest, Quaternion.identity, transform)
                         .GetComponent<intersectionCollider>();
-                
-                intersectionCol.SetSplines(currentSpline, splineToConnect, t);*/
+
+                intersectionCol.SetSplines(currentSpline, splineToConnect, t);
             }
         }
+
         else
         {
             // Normal knot addition without connection
