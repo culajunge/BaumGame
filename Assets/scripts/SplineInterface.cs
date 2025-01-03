@@ -20,6 +20,7 @@ public class SplineInterface : MonoBehaviour
     [SerializeField] int mannequinsPerSpline = 3;
     [SerializeField] private GameObject mannequinPrefab;
     [SerializeField] public CustomSplineMesh splineMesh;
+    [SerializeField] float snapThreshold = 0.1f;
     private BezierKnot latestKnot;
     private int latestSplineID;
     bool actuallyPlacedPath = false;
@@ -92,14 +93,48 @@ public class SplineInterface : MonoBehaviour
                     resolution: splineConnectionResolution,
                     iterations: splineConnectionIterations
                 );
+                Debug.DrawRay(position, Vector3.up * 5f, Color.cyan, 1000f);
+                Debug.DrawRay((Vector3)nearest, Vector3.up * 10f, Color.blue, 1000f);
 
-                // Find the correct segment index for insertion
+                #region find best index
+
+                // AREA: Find the correct segment index for insertion
+
                 int segmentCount = splineToConnect.Count - 1;
-                int insertIndex = Mathf.Clamp(Mathf.CeilToInt(t * segmentCount), 0, segmentCount);
+
+                // Check distances to existing knots first
+                float minKnotDistance = float.MaxValue;
+                int closestKnotIndex = -1;
+                for (int i = 0; i < splineToConnect.Count; i++)
+                {
+                    float distance = Vector3.Distance(splineToConnect[i].Position, nearest);
+                    if (distance < minKnotDistance)
+                    {
+                        minKnotDistance = distance;
+                        closestKnotIndex = i;
+                    }
+                }
+
+                // If we're very close to an existing knot, use that index
+                int insertIndex;
+                if (minKnotDistance < snapThreshold)
+                {
+                    insertIndex = closestKnotIndex;
+                }
+                else
+                {
+                    insertIndex = Mathf.Clamp(Mathf.CeilToInt(t * segmentCount), 0, segmentCount);
+                }
+
+                print(
+                    $"Insert index: {insertIndex.ToString()}/{(segmentCount + 2).ToString()}, Distance to nearest knot: {minKnotDistance}");
+
+                #endregion
 
                 // Create knot at intersection point on target spline
                 BezierKnot connectionKnot = new BezierKnot(nearest);
                 splineToConnect.Insert(insertIndex, connectionKnot);
+
 
                 // Add knot to current spline
                 latestKnot = AddKnot(splineIndex, splineContainer.Splines[splineIndex].Count, nearest, normal, offset);
@@ -120,7 +155,6 @@ public class SplineInterface : MonoBehaviour
                 intersectionCol.FinishSetup();
             }
         }
-
         else
         {
             // Normal knot addition without connection
@@ -213,7 +247,7 @@ public class SplineInterface : MonoBehaviour
     public BezierKnot AddKnot(int splineID, int knotID, Vector3 position, Vector3 normal, bool offset)
     {
         latestSplineID = splineID;
-        Debug.DrawRay(position, normal.normalized * 10, Color.red, 10000);
+        Debug.DrawRay(position, normal.normalized * 2, Color.red, 10000);
 
         /*
         
