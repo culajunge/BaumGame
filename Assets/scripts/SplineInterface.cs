@@ -114,7 +114,10 @@ public class SplineInterface : MonoBehaviour
                     Instantiate(intersectionColliderPrefab, nearest, Quaternion.identity, transform)
                         .GetComponent<intersectionCollider>();
 
-                intersectionCol.SetSplines(currentSpline, splineToConnect, t);
+                float endingPointProgress = firstPlace ? 0f : 1f;
+
+                intersectionCol.SetSplines(currentSpline, splineToConnect, t, endingPointProgress);
+                intersectionCol.FinishSetup();
             }
         }
 

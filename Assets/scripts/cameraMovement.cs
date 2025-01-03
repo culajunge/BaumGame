@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class cameraMovement : MonoBehaviour
@@ -21,6 +22,8 @@ public class cameraMovement : MonoBehaviour
     private Vector3 zoom; // Zoom reference variable
     bool lockedMovement = false;
 
+    [SerializeField] TMP_Text debugText;
+
     public void SetMovementLock(bool val)
     {
         lockedMovement = val;
@@ -29,6 +32,11 @@ public class cameraMovement : MonoBehaviour
     public bool GetMovementLock()
     {
         return lockedMovement;
+    }
+
+    void SetDebugText()
+    {
+        //debugText.text = $"Zoom Speed: {zoomSpeed}, "
     }
 
     void Start()

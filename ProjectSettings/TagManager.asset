@@ -14,6 +14,7 @@ TagManager:
   - BucketBoys
   - Building
   - Path
+  - Mannequin
   layers:
   - Default
   - TransparentFX
