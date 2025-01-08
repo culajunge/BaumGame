@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class cameraMovement : MonoBehaviour
 {
+
+    //GIT VERSION 
+
     public float baseDragSpeed = 2.0f;        // Speed of the camera movement
     public float maxSpeedMultiplier = 3.0f;  // Maximum speed multiplier
     public float smoothSpeed = 0.125f;    // Smoothing speed for interpolation
