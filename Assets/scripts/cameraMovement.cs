@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 public class cameraMovement : MonoBehaviour
 {
+    //GIT VERSION 
+
     public float baseDragSpeed = 2.0f; // Speed of the camera movement
     public float maxSpeedMultiplier = 3.0f; // Maximum speed multiplier
     public float smoothSpeed = 0.125f; // Smoothing speed for interpolation
@@ -22,8 +23,6 @@ public class cameraMovement : MonoBehaviour
     private Vector3 zoom; // Zoom reference variable
     bool lockedMovement = false;
 
-    [SerializeField] TMP_Text debugText;
-
     public void SetMovementLock(bool val)
     {
         lockedMovement = val;
@@ -32,11 +31,6 @@ public class cameraMovement : MonoBehaviour
     public bool GetMovementLock()
     {
         return lockedMovement;
-    }
-
-    void SetDebugText()
-    {
-        //debugText.text = $"Zoom Speed: {zoomSpeed}, "
     }
 
     void Start()
@@ -134,6 +128,7 @@ public class cameraMovement : MonoBehaviour
         if (scrollData != 0)
         {
             Zoom(scrollData);
+            return;
         }
 
         // Pinch Zoom for Touch Input
@@ -159,22 +154,11 @@ public class cameraMovement : MonoBehaviour
     }
 
     // Method to handle zooming
-    void Zoom(float increment, bool touch = false)
+    void Zoom(float increment)
     {
         zoom += cam.transform.forward * increment * zoomSpeed;
         camDir.localPosition = zoom;
         UpdateDragSpeed();
-        /*
-        // Ensure the zoom level remains within the desired bounds
-        float distance = Vector3.Distance(camDir.localPosition, transform.position);
-        if (distance < minZoom)
-        {
-            zoom = transform.position + (camDir.localPosition - transform.position).normalized * minZoom;
-        }
-        else if (distance > maxZoom)
-        {
-            zoom = transform.position + (camDir.localPosition - transform.position).normalized * maxZoom;
-        }*/
     }
 
     void HandleWebGLInput()
