@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ConnectionManager : MonoBehaviour
 {
+    /*
     List<ConnectionWaterBeet> connectionsWB = new List<ConnectionWaterBeet>();
 
     public void AddConnectionWB(int splineID, Beet beet, BucketBoys bucketBoys)
@@ -69,7 +70,7 @@ public class ConnectionManager : MonoBehaviour
             }
 
         }
-    }
+    }*/
 }
 
 public class ConnectionWaterBeet

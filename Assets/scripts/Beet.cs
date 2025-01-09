@@ -8,11 +8,12 @@ public class Beet : MonoBehaviour
     List<TreeBehavior> trees = new List<TreeBehavior>();
     public bool enoughWater = false;
     [HideInInspector] public BeetConnector beetConnector;
-    
+
     [SerializeField] GameObject waterShortageInformer;
 
     private int water = 0;
     private int waterDemand = 0;
+
     public int GetWater()
     {
         return water;
@@ -25,11 +26,13 @@ public class Beet : MonoBehaviour
 
     bool ConsumeWater(int amount)
     {
-        if(amount > water) return false;
-        
+        if (amount > water) return false;
+
         water -= amount;
+        print($"Water: {water + amount} -> {water}");
         return true;
     }
+
     public void OnPlaceDown()
     {
         manager = GameObject.FindFirstObjectByType<Manager>();
@@ -37,22 +40,32 @@ public class Beet : MonoBehaviour
         tag = manager.GetBeetTag();
     }
 
+    public void OnMannequinCollsion(Mannequin mannequin)
+    {
+        if (mannequin.GetResourceType() != manager.GetWaterResourceTag()) return;
+        int amount = mannequin.GetResourceAmount();
+        AddWater(amount);
+        mannequin.SetResource("", 0);
+        print($"Reset Mannequin, thanks for {amount} water");
+        IsWaterShortage();
+    }
+
     public bool IsWaterShortage()
     {
         enoughWater = water >= waterDemand;
-        
+
         waterShortageInformer.SetActive(!enoughWater);
         return !enoughWater;
     }
 
     public void GrowTrees()
     {
-        if(IsWaterShortage()) return;
-        if(!ConsumeWater(waterDemand)) return;
+        if (IsWaterShortage()) return;
+        if (!ConsumeWater(waterDemand)) return;
 
         foreach (TreeBehavior tree in trees)
         {
-            if(tree == null) continue;
+            if (tree == null) continue;
             tree.Grow();
         }
     }
@@ -62,23 +75,24 @@ public class Beet : MonoBehaviour
         int demand = 0;
         foreach (TreeBehavior tree in trees)
         {
-            if(tree == null) continue;
+            if (tree == null) continue;
             demand += manager.indexer.trees[tree.treeID].waterConsumption;
         }
+
         return demand;
     }
-    
+
     void ToggleIgnoreRaycastLayer(bool ignore)
     {
         gameObject.layer = ignore ? 2 : 0;
     }
-    
+
     public void AddTree(TreeBehavior treeBehavior)
     {
         trees.Add(treeBehavior);
         treeBehavior.treeBeetIndex = GetLastTreeIndex();
-        //IsWaterShortage();
         waterDemand = GetWaterDemand();
+        IsWaterShortage();
     }
 
     public void RemoveTree(TreeBehavior tree)
@@ -95,7 +109,7 @@ public class Beet : MonoBehaviour
                 trees[i].OnDismantle();
             }
         }
-        
+
         beetConnector.OnDismantle();
     }
 

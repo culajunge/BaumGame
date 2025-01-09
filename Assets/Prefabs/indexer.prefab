@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8156831278015122095}
   - component: {fileID: 7016597068337333468}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: indexer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,5 +50,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4e9fba30cc770c54a8d94525ac8ef390, type: 2}
   buildings:
   - {fileID: 11400000, guid: 43aa2ae7eeb5d334da139d29f4b61792, type: 2}
-  - {fileID: 11400000, guid: f94bbbbe0b2ea4446849078d865e823c, type: 2}
   - {fileID: 11400000, guid: 468793da054729744838d32472b69ef6, type: 2}
+  - {fileID: 11400000, guid: 3d218270265b3d04c889257623c946f6, type: 2}

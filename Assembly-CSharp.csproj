@@ -47,9 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\scripts\CustomSplineMesh.cs" />
+    <Compile Include="Assets\scripts\mannequinCollider.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\UIButton_ShowNext.cs" />
     <Compile Include="Assets\scripts\SunRotation.cs" />
     <Compile Include="Assets\Outline by The Developer\Outline\O_CustomImageEffect.cs" />
+    <Compile Include="Assets\scripts\civilTent.cs" />
     <Compile Include="Assets\scripts\Building.cs" />
     <Compile Include="Assets\scripts\TreeBehavior.cs" />
     <Compile Include="Assets\scripts\Manager.cs" />
@@ -74,7 +76,6 @@
     <Compile Include="Assets\ScriptOBJs\Trees\tree.cs" />
     <Compile Include="Assets\scripts\GrassBehavior.cs" />
     <Compile Include="Assets\scripts\UIBuildingItem.cs" />
-    <Compile Include="Assets\scripts\WaterMannequin.cs" />
     <Compile Include="Assets\scripts\UITreeItem.cs" />
     <Compile Include="Assets\scripts\indexer.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\SuperCamera.cs" />

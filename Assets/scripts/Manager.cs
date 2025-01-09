@@ -22,14 +22,18 @@ public class Manager : MonoBehaviour
     [SerializeField] const string buildingTag = "Building";
     [SerializeField] const string pathTag = "Path";
 
+    [SerializeField] public const string waterResourceTag = "water";
+
     [Header("Settings")] [SerializeField] public float treeGrowthSmallMaker = 0.01f;
 
     [FormerlySerializedAs("O2CollectCycle")] [SerializeField]
     private int o2CollectCycle = 5;
 
-    [SerializeField] private int treeGrowCycleSeconds = 10;
+    [SerializeField] public int tickTimeSeconds = 10;
     [SerializeField] float oxygenToGoldRatio = 0.2f;
     [SerializeField] float goldToWoodRatio = 2;
+
+    [SerializeField] public GameObject mannequinColliderPrefab;
 
 
     private GameObject currentTreePreview;
@@ -76,6 +80,11 @@ public class Manager : MonoBehaviour
     public string GetBeetTag()
     {
         return beetTag;
+    }
+
+    public string GetWaterResourceTag()
+    {
+        return waterResourceTag;
     }
 
     public int GetGold()
@@ -211,9 +220,6 @@ public class Manager : MonoBehaviour
         }
     }
 
-    BucketBoys connecBB;
-    Beet connecBeet;
-
     void HandlePathPlacement(RaycastHit hit)
     {
         if (GetMouseDownOnMap()) //TODO do some tag detection so no paths in weird places ig
@@ -227,24 +233,19 @@ public class Manager : MonoBehaviour
 
 
             int connectToSplineIndex = -2;
+            var (curspline, isPublicFirstPlace) = GetSplineWithEnds();
 
             if (hit.collider.gameObject.TryGetComponent<Building>(out Building bd))
             {
                 hit.point = bd.GetNearestPathConnector(hit.point).position;
-                bd.OnPathConnect();
+                bd.OnPathConnect(curspline, isPublicFirstPlace);
 
                 autoExit = true;
-
-                if (hit.collider.gameObject.TryGetComponent<BucketBoys>(out BucketBoys bb))
-                {
-                    connecBB = bb;
-                }
             }
             else if (hit.collider.gameObject.TryGetComponent<Beet>(out Beet bt))
             {
                 hit.point = bt.beetConnector.GetNearestPathConnector(hit.point).position;
-                bt.beetConnector.OnPathConnect();
-                connecBeet = bt;
+                bt.beetConnector.OnPathConnect(curspline, isPublicFirstPlace);
                 autoExit = true;
             }
             else if (hit.collider.transform.CompareTag(pathTag))
@@ -256,26 +257,22 @@ public class Manager : MonoBehaviour
             else
             {
                 print($"Debug hit {hit.transform.name}, Tag: {hit.transform.tag}");
-                offset = true;
             }
 
+            offset = true;
 
-            //map.splineInterface.AddSplineOrKnot(tf.position, tf.eulerAngles, offset: offset);
             int splineID =
                 map.splineInterface.AddSplineOrKnot(hit.point, map.GetTerrainNormal(hit.point), offset: offset,
                     connectToSplineIndex: connectToSplineIndex);
 
-            /*
-            if (connecBeet != null && connecBB != null)
-            {
-                connecManager.AddConnectionWB(splineID, connecBeet, connecBB);
-                connecBeet = null;
-                connecBB = null;
-            }*/
-
             Destroy(dbgobj);
             //if(autoExit) ExitPathModeAuto();
         }
+    }
+
+    (Spline, bool) GetSplineWithEnds()
+    {
+        return (map.splineInterface.currentSpline, map.splineInterface.isFirstPlace());
     }
 
     int GetSplineIdFromHit(RaycastHit hit)
@@ -364,12 +361,6 @@ public class Manager : MonoBehaviour
     {
         placingPath = val;
         map.splineInterface.OnPathPlaceMode(val);
-
-        if (!val)
-        {
-            connecBeet = null;
-            connecBB = null;
-        }
     }
 
     public void PaybackBuilding(int id)
@@ -426,7 +417,7 @@ public class Manager : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(treeGrowCycleSeconds);
+            yield return new WaitForSeconds(tickTimeSeconds);
             map.GrowTrees();
         }
     }

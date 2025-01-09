@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 using Unity.Splines.Examples;
+using Unity.VisualScripting;
 using UnityEngine.Splines;
 using Random = UnityEngine.Random;
 
@@ -13,7 +14,7 @@ public class SplineInterface : MonoBehaviour
     [SerializeField] private GameObject firstPathMarkerPrefab;
     [SerializeField] private GameObject intersectionColliderPrefab;
     [SerializeField] map map;
-    Spline currentSpline;
+    [HideInInspector] public Spline currentSpline;
     [SerializeField] private float knotGroundOffset = 1f;
     [SerializeField] private int splineConnectionResolution = 10;
     [SerializeField] private int splineConnectionIterations = 2;
@@ -29,6 +30,7 @@ public class SplineInterface : MonoBehaviour
 
 
     private bool firstPlace = false;
+    [HideInInspector] public bool publicFirstPlace = false;
 
     void Start()
     {
@@ -51,6 +53,11 @@ public class SplineInterface : MonoBehaviour
         }
     }
 
+    public bool isFirstPlace()
+    {
+        return firstPlace;
+    }
+
     public void OnPathPlaceMode(bool val)
     {
         firstPlace = true;
@@ -60,7 +67,6 @@ public class SplineInterface : MonoBehaviour
             knotsPlacedPerPathPlaceMode = 0;
             if (actuallyPlacedPath)
             {
-                SpawnMannequins(GetSplineIndex(currentSpline), 1);
                 actuallyPlacedPath = false;
             }
         }
@@ -69,8 +75,10 @@ public class SplineInterface : MonoBehaviour
     public int AddSplineOrKnot(Vector3 position, Vector3 normal, bool newSpline = false, bool offset = false,
         int connectToSplineIndex = -1)
     {
+        publicFirstPlace = false;
         if (newSpline || splineContainer.Splines.Count <= 0 || firstPlace)
         {
+            publicFirstPlace = true;
             currentSpline = AddSpline();
         }
 
@@ -151,6 +159,7 @@ public class SplineInterface : MonoBehaviour
 
                 float endingPointProgress = firstPlace ? 0f : 1f;
 
+                intersectionCol.SetMap(map);
                 intersectionCol.SetSplines(currentSpline, splineToConnect, t, endingPointProgress);
                 intersectionCol.FinishSetup();
             }
@@ -159,6 +168,15 @@ public class SplineInterface : MonoBehaviour
         {
             // Normal knot addition without connection
             latestKnot = AddKnot(splineIndex, splineContainer.Splines[splineIndex].Count, position, normal, offset);
+        }
+
+        if (SpawnMannequinsDelayed && knotsPlacedPerPathPlaceMode == 1)
+        {
+            SpawnMannequinsDelayed = false;
+            SpawnMannequins(currentSpline, delayedMannequinProgress, delayedMannequinAmount);
+            delayedMannequinSpline = null;
+            delayedMannequinProgress = 0f;
+            delayedMannequinAmount = 0;
         }
 
         knotsPlacedPerPathPlaceMode++;
@@ -193,7 +211,7 @@ public class SplineInterface : MonoBehaviour
         }
     }
 
-    Spline GetSplineFromIndex(int splineIndex)
+    public Spline GetSplineFromIndex(int splineIndex)
     {
         return splineContainer.Splines[splineIndex];
     }
@@ -281,20 +299,47 @@ public class SplineInterface : MonoBehaviour
         return knot;
     }
 
-    void SpawnMannequins(int splineID, int amount)
-    {
-        if (splineID == -1) print("NIGGERS");
+    private Spline delayedMannequinSpline;
+    float delayedMannequinProgress;
+    int delayedMannequinAmount;
+    private bool SpawnMannequinsDelayed = false;
 
+    public int? SpawnMannequinsSafelyOnCurrentSpline(Spline spline, float progress, int amount, bool isStart)
+    {
+        if (isStart)
+        {
+            delayedMannequinSpline = spline;
+            delayedMannequinProgress = progress;
+            delayedMannequinAmount = amount;
+            SpawnMannequinsDelayed = true;
+            return null;
+        }
+
+        return SpawnMannequins(spline, progress, amount);
+    }
+
+    public int SpawnMannequins(Spline spline, float progress, int amount)
+    {
+        int firstMannequinIndex = -1;
         for (int i = 0; i < amount; i++)
         {
             GameObject mannequinObj = Instantiate(mannequinPrefab);
+
+            int index = map.GetMannequinCount();
+            mannequinObj.name = index.ToString();
+            if (firstMannequinIndex == -1) firstMannequinIndex = index;
+
             Mannequin mannequin = mannequinObj.GetComponent<Mannequin>();
 
-            mannequin.spline = splineContainer.Splines[splineID];
-            mannequin.startProgress = Random.Range(0f, 1f);
+            mannequin.spline = spline;
+            mannequin.startProgress = progress;
             mannequin.splineContainer = splineContainer;
+
+            map.AddMannequin(mannequin, index);
 
             mannequin.OnStart();
         }
+
+        return firstMannequinIndex;
     }
 }

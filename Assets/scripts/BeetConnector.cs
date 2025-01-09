@@ -13,8 +13,14 @@ public class BeetConnector : Building
 
     public override void OnPlaceDown()
     {
+        base.OnPlaceDown();
         beet.beetConnector = this;
         beet.OnPlaceDown();
+    }
+
+    public override void OnMannequinCollision(Mannequin mannequin)
+    {
+        beet.OnMannequinCollsion(mannequin);
     }
 
     public void AddTree(TreeBehavior treeBehavior)
@@ -25,7 +31,7 @@ public class BeetConnector : Building
     public override void OnDismantle()
     {
         base.OnDismantle();
-        
+
         print("Dismantle beet");
     }
 }

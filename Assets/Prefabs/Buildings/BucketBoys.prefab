@@ -433,7 +433,7 @@ MonoBehaviour:
   - {fileID: 1299408014930058831}
   buildingIndex: 0
   buildingID: 0
-  waterOutput: 10
+  waterOutputPerTick: 1
 --- !u!65 &5808686252429263053
 BoxCollider:
   m_ObjectHideFlags: 0
