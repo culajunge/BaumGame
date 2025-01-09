@@ -52,8 +52,20 @@ public class Manager : MonoBehaviour
 
     bool GetMouseDownOnMap()
     {
-        return Input.GetMouseButtonDown(0) && UnityEngine.EventSystems.EventSystem.current != null &&
-               !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+            }
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        }
+
+        return false;
     }
 
 
@@ -237,14 +249,18 @@ public class Manager : MonoBehaviour
 
             if (hit.collider.gameObject.TryGetComponent<Building>(out Building bd))
             {
-                hit.point = bd.GetNearestPathConnector(hit.point).position;
+                Vector3? point = bd.GetNearestPathConnector(hit.point)?.position;
+                if (point == Vector3.zero || point == null) return;
+                hit.point = (Vector3)point;
                 bd.OnPathConnect(curspline, isPublicFirstPlace);
 
                 autoExit = true;
             }
             else if (hit.collider.gameObject.TryGetComponent<Beet>(out Beet bt))
             {
-                hit.point = bt.beetConnector.GetNearestPathConnector(hit.point).position;
+                Vector3? point = bt.beetConnector.GetNearestPathConnector(hit.point)?.position;
+                if (point == Vector3.zero || point == null) return;
+                hit.point = (Vector3)point;
                 bt.beetConnector.OnPathConnect(curspline, isPublicFirstPlace);
                 autoExit = true;
             }

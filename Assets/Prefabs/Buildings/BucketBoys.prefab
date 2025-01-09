@@ -430,7 +430,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathConnectors:
-  - {fileID: 1299408014930058831}
+  - transform: {fileID: 1299408014930058831}
+    isConnected: 0
   buildingIndex: 0
   buildingID: 0
   waterOutputPerTick: 1

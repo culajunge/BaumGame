@@ -1,12 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Splines;
 using UnityEngine.UIElements;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] public Transform[] pathConnectors;
+    [SerializeField] public PathConnector[] pathConnectors;
+
+    [System.Serializable]
+    public class PathConnector
+    {
+        public Transform transform;
+        [HideInInspector] public bool isConnected;
+    }
+
     Manager manager;
 
     [HideInInspector] public int buildingIndex;
@@ -32,11 +41,12 @@ public class Building : MonoBehaviour
 
     void CreateMannequinColliders()
     {
-        foreach (Transform pathConnector in pathConnectors)
+        foreach (PathConnector pathConnector in pathConnectors)
         {
+            Transform pathConnectorTransform = pathConnector.transform;
             mannequinCollider mancol =
-                Instantiate(manager.mannequinColliderPrefab, pathConnector).GetComponent<mannequinCollider>();
-            mancol.transform.position = pathConnector.position;
+                Instantiate(manager.mannequinColliderPrefab, pathConnectorTransform).GetComponent<mannequinCollider>();
+            mancol.transform.position = pathConnectorTransform.position;
 
             mancol.SetMap(FindFirstObjectByType<map>());
             mancol.SetCollisionCallback(OnMannequinCollision);
@@ -64,21 +74,31 @@ public class Building : MonoBehaviour
         Destroy(gameObject);
     }
 
+    [CanBeNull]
     public Transform GetNearestPathConnector(Vector3 position)
     {
         float minDist = float.MaxValue;
         Transform nearestPathConnector = null;
 
-        foreach (Transform pathConnector in pathConnectors)
+        int index = -1;
+        int finalIndex = -1;
+        foreach (PathConnector pathConnector in pathConnectors)
         {
-            float dist = Vector3.Distance(pathConnector.position, position);
+            index++;
+            if (pathConnector.isConnected) continue;
+            Transform pathConnectorTransform = pathConnector.transform;
+            float dist = Vector3.Distance(pathConnectorTransform.position, position);
             if (dist < minDist)
             {
                 minDist = dist;
-                nearestPathConnector = pathConnector;
+                nearestPathConnector = pathConnectorTransform;
+                finalIndex = index;
             }
         }
 
+        if (nearestPathConnector == null) return null;
+
+        pathConnectors[finalIndex].isConnected = true;
         return nearestPathConnector;
     }
 

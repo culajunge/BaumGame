@@ -250,6 +250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7752900a1a044734b8f4726aa417c22b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enoughWater: 0
   beetConnector: {fileID: 0}
   waterShortageInformer: {fileID: 5597693635725404546}
 --- !u!1 &7705016707161304333
@@ -335,10 +336,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pathConnectors:
-  - {fileID: 6033527179502621129}
-  - {fileID: 3972517631380300746}
-  - {fileID: 7300755527687726743}
-  - {fileID: 1691298044378098308}
+  - transform: {fileID: 6033527179502621129}
+    isConnected: 0
+  - transform: {fileID: 3972517631380300746}
+    isConnected: 0
+  - transform: {fileID: 7300755527687726743}
+    isConnected: 0
+  - transform: {fileID: 1691298044378098308}
+    isConnected: 0
   buildingIndex: 0
   buildingID: 0
   beet: {fileID: 7745227720407410090}

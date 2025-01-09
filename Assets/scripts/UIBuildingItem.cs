@@ -25,5 +25,4 @@ public class UIBuildingItem : MonoBehaviour
     {
         preview.sprite = previewImg;
     }
-    
 }
