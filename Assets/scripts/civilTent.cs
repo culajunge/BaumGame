@@ -8,6 +8,11 @@ public class civilTent : Building
     [SerializeField] int mannequins = 1;
     SplineInterface splineInterface;
 
+    public int GetAssociatedMannequins()
+    {
+        return mannequins;
+    }
+
     public override void OnPlaceDown()
     {
         base.OnPlaceDown();

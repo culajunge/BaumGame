@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Timers;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class map : MonoBehaviour
 {
     [Header("Refs")] [SerializeField] Terrain terrain;
-    [SerializeField] Manager manager;
+    [SerializeField] public Manager manager;
     [SerializeField] dayNightCycle dayNightCycle;
     [SerializeField] public SplineInterface splineInterface;
 
@@ -20,6 +24,19 @@ public class map : MonoBehaviour
 
     List<Mannequin> mannequins = new List<Mannequin>();
 
+    public List<int> GetTreeInventory()
+    {
+        List<int> treeInventory = new List<int>();
+        indexer indexer = manager.indexer;
+
+        foreach (tree tree in indexer.trees)
+        {
+            treeInventory.Add(tree.amount);
+        }
+
+        return treeInventory;
+    }
+
     public void AddMannequin(Mannequin mannequin, int index)
     {
         mannequins.Insert(index, mannequin);
@@ -28,6 +45,11 @@ public class map : MonoBehaviour
     public Mannequin GetMannequin(int index)
     {
         return mannequins[index];
+    }
+
+    public List<Mannequin> GetMannequins()
+    {
+        return mannequins;
     }
 
     public int GetMannequinCount()
@@ -90,7 +112,7 @@ public class map : MonoBehaviour
         foreach (Beet beet in beetsList)
         {
             if (beet == null) continue;
-            beet.GrowTrees();
+            beet.GrowTreesAnCollectSeeds();
         }
     }
 
@@ -148,4 +170,172 @@ public class map : MonoBehaviour
         TreeBehavior tree = treesList[^1].GetComponent<TreeBehavior>();
         return tree.treeIndex;
     }
+
+    #region Save Data
+
+    List<WeakTransformData> SplineKnotsToWeakTransforms(Spline spline)
+    {
+        List<WeakTransformData> transforms = new List<WeakTransformData>();
+
+        foreach (BezierKnot knot in spline.Knots)
+        {
+            WeakTransformData transformData = new WeakTransformData(knot.Position, knot.Rotation);
+            transforms.Add(transformData);
+        }
+
+        return transforms;
+    }
+
+    public void SaveGame()
+    {
+        Stopwatch timer = new Stopwatch();
+        timer.Start();
+        print("Saving game...");
+
+        GameSaveData saveData = new GameSaveData();
+
+        // Save resources
+        saveData.gold = manager.GetGold();
+        saveData.wood = manager.GetWood();
+        saveData.oxygen = manager.GetOxygen();
+
+        // Save tree inventory
+        saveData.treeInventory = GetTreeInventory();
+
+        // Save buildings
+        foreach (GameObject buildingObj in buildingsList)
+        {
+            Building building = buildingObj.GetComponent<Building>();
+
+            if (building is BeetConnector beetConnector) continue;
+
+            BuildingData data = new BuildingData
+            {
+                buildingTag = building.transform.tag,
+                buildingTypeId = building.buildingID,
+                weakTransform = new WeakTransformData(building.transform.position, building.transform.rotation)
+            };
+
+            // Handle specific building types
+            if (building is BucketBoys bucketBoys)
+            {
+                data.bucketBoysData = new BucketBoysData
+                {
+                    bucketBoyTypeId = bucketBoys.buildingID,
+                    water = bucketBoys.GetCurrentWater()
+                };
+            }
+            else if (building is civilTent workerTent)
+            {
+                data.workerTentData = new WorkerTentData
+                {
+                    associatedMannequins = workerTent.GetAssociatedMannequins(),
+                };
+            }
+            else if (building is shredder shredder)
+            {
+                data.shredderData = new ShredderData
+                {
+                    seeds = shredder.GetSeeds(),
+                };
+            }
+
+            saveData.buildingData.Add(data);
+        }
+
+        // Save beets
+        foreach (Beet beet in beetsList)
+        {
+            BeetData beetData = new BeetData
+            {
+                beetTypeId = beet.GetBeetTypeId(),
+                position = beet.transform.position,
+                seeds = beet.GetSeeds(),
+                water = beet.GetWater()
+            };
+
+            // Save trees on this beet
+            foreach (TreeBehavior tree in beet.GetTrees())
+            {
+                TreeData treeData = new TreeData
+                {
+                    treeSpeciesId = tree.treeID,
+                    position = tree.transform.position,
+                    growth = tree.GetGrowth()
+                };
+                beetData.trees.Add(treeData);
+            }
+
+            saveData.beetData.Add(beetData);
+        }
+
+        int tempIndex = 0;
+        // Save paths
+        foreach (Spline path in splineInterface.splineContainer.Splines)
+        {
+            PathData pathData = new PathData
+            {
+                pathId = tempIndex,
+                knots = SplineKnotsToWeakTransforms(path)
+            };
+            saveData.pathData.Add(pathData);
+
+            tempIndex++;
+        }
+
+        // Save to file
+        string json = JsonUtility.ToJson(saveData, true);
+        File.WriteAllText(Application.persistentDataPath + "/gamesave.json", json);
+
+        timer.Stop();
+        print($"Game saved in {timer.ElapsedMilliseconds}ms to {Application.persistentDataPath}/gamesave.json");
+    }
+
+    public void LoadGame()
+    {
+        Stopwatch timer = new Stopwatch();
+        timer.Start();
+        print("Loading game...");
+
+        ClearAllExistingObjects();
+
+        string path = Application.persistentDataPath + "/gamesave.json";
+        if (!File.Exists(path))
+        {
+            print("No save file found!");
+            return;
+        }
+
+        string json = File.ReadAllText(path);
+        GameSaveData saveData = JsonUtility.FromJson<GameSaveData>(json);
+
+
+        timer.Stop();
+        print($"Game loaded in {timer.ElapsedMilliseconds}ms from {path}");
+    }
+
+    private void ClearAllExistingObjects()
+    {
+        manager.SetInventory(0, 0, 0, new List<int>(manager.indexer.trees.Length));
+
+        foreach (Beet beet in beetsList)
+        {
+            beet.beetConnector.OnDismantle();
+        }
+
+        foreach (GameObject bd in buildingsList)
+        {
+            if (bd.CompareTag(manager.GetBeetTag())) continue;
+            bd.GetComponent<Building>().OnDismantle();
+        }
+
+        foreach (Mannequin mannequin in mannequins)
+        {
+            mannequin.CommitSuicide();
+        }
+
+        splineInterface.ClearAllSplines();
+    }
+
+    #endregion
 }

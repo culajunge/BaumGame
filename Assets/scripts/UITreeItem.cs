@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class UITreeItem : MonoBehaviour
-{   
+public class UITreeItem : MonoBehaviour, IPointerDownHandler
+{
     //Hello im hal and im resposible for the ui
 
     [SerializeField] private Image preview;
@@ -19,7 +21,19 @@ public class UITreeItem : MonoBehaviour
     {
         button.onClick.AddListener(action);
     }
-    
+
+    private UnityEvent onPointerDownEvent = new UnityEvent();
+
+    public void AddOnPointerDownListener(UnityAction action)
+    {
+        onPointerDownEvent.AddListener(action);
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        onPointerDownEvent.Invoke();
+    }
+
     public void OnInstance()
     {
         preview.sprite = previewImg;

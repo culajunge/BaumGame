@@ -299,6 +299,14 @@ public class SplineInterface : MonoBehaviour
         return knot;
     }
 
+    public void ClearAllSplines()
+    {
+        foreach (Spline spline in splineContainer.Splines)
+        {
+            spline.Clear();
+        }
+    }
+
     private Spline delayedMannequinSpline;
     float delayedMannequinProgress;
     int delayedMannequinAmount;
@@ -331,6 +339,7 @@ public class SplineInterface : MonoBehaviour
 
             Mannequin mannequin = mannequinObj.GetComponent<Mannequin>();
 
+            mannequin.manager = map.manager;
             mannequin.spline = spline;
             mannequin.startProgress = progress;
             mannequin.splineContainer = splineContainer;

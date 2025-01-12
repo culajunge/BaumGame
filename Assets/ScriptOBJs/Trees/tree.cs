@@ -6,6 +6,7 @@ using UnityEngine;
 public class tree : ScriptableObject
 {
     public string treeName;
+    public int level;
 
     public Sprite treePreview;
 

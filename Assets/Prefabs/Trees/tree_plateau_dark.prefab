@@ -4948,6 +4948,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da74c0c60b51c784fa25ae9a302e8499, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  treeIndex: 0
+  treeBeetIndex: 0
+  treeID: 0
+  beet: {fileID: 0}
+  level: 1
 --- !u!65 &3409209953159551467
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\scripts\CustomSplineMesh.cs" />
+    <Compile Include="Assets\scripts\mainBuilding.cs" />
     <Compile Include="Assets\scripts\mannequinCollider.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\UIButton_ShowNext.cs" />
     <Compile Include="Assets\scripts\SunRotation.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Assets\scripts\inventory.cs" />
     <Compile Include="Assets\scripts\map.cs" />
     <Compile Include="Assets\scripts\intersectionCollider.cs" />
+    <Compile Include="Assets\scripts\GameSaveData.cs" />
     <Compile Include="Assets\scripts\Beet.cs" />
     <Compile Include="Assets\ScriptOBJs\Buildings\building.cs" />
     <Compile Include="Assets\scripts\cameraMovement.cs" />
@@ -66,10 +68,12 @@
     <Compile Include="Assets\scripts\BucketBoys.cs" />
     <Compile Include="Assets\scripts\Simple Billboard Renderer.cs" />
     <Compile Include="Assets\scripts\dayNightCycle.cs" />
+    <Compile Include="Assets\scripts\PanAndZoom.cs" />
     <Compile Include="Assets\Ciconia Studio\_Shared Files\Scripts\Demo\FreeCam.cs" />
     <Compile Include="Assets\scripts\Mannequin.cs" />
     <Compile Include="Assets\Outline by The Developer\Example Scene\Example Scene\O_ReviewCam.cs" />
     <Compile Include="Assets\scripts\SplineInterface.cs" />
+    <Compile Include="Assets\scripts\shredder.cs" />
     <Compile Include="Assets\scripts\UIBehavior.cs" />
     <Compile Include="Assets\scripts\ScrollRectEx.cs" />
     <Compile Include="Assets\scripts\stumpBehavior.cs" />

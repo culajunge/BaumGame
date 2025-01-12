@@ -5,8 +5,18 @@ using UnityEngine;
 public class BucketBoys : Building
 {
     [SerializeField] int waterOutputPerTick = 10;
+    [SerializeField] private Transform waterLevel;
+
+    float waterLevelMin = 0;
+    float waterLevelMax = 1.2f;
     private int currentWater = 0;
     bool isActive = true;
+
+
+    public int GetCurrentWater()
+    {
+        return currentWater;
+    }
 
     public override void OnPlaceDown()
     {
@@ -15,12 +25,21 @@ public class BucketBoys : Building
         StartCoroutine(WaterTicksLoop());
     }
 
+    void UpdateWaterLevel()
+    {
+        float currentWaterAsFloat = (float)currentWater / 4f;
+        float height = Mathf.Lerp(waterLevelMin, waterLevelMax, currentWaterAsFloat);
+
+        waterLevel.localPosition = new Vector3(0, height, 0);
+    }
+
     IEnumerator WaterTicksLoop()
     {
         while (true)
         {
             yield return new WaitForSeconds(GetManager().tickTimeSeconds);
             if (isActive) currentWater += waterOutputPerTick;
+            UpdateWaterLevel();
         }
     }
 
@@ -35,5 +54,8 @@ public class BucketBoys : Building
         int transferAmount = Mathf.Min(demand, currentWater);
         currentWater -= transferAmount;
         mannequin.SetResource(GetManager().GetWaterResourceTag(), mannequinResourceAmount + transferAmount);
+        mannequin.ChangeColor(GetManager().waterColor);
+
+        UpdateWaterLevel();
     }
 }

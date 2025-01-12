@@ -21,8 +21,14 @@ public class Manager : MonoBehaviour
     [SerializeField] const string stumpTag = "Stump";
     [SerializeField] const string buildingTag = "Building";
     [SerializeField] const string pathTag = "Path";
+    [SerializeField] const string bucketBoysTag = "BucketBoys";
+    [SerializeField] const string shredderTag = "Shredder";
 
+    [SerializeField] public Color emptyColor;
     [SerializeField] public const string waterResourceTag = "water";
+    [SerializeField] public Color waterColor;
+    [SerializeField] public const string seedResourceTag = "seed";
+    [SerializeField] public Color seedColor;
 
     [Header("Settings")] [SerializeField] public float treeGrowthSmallMaker = 0.01f;
 
@@ -50,7 +56,43 @@ public class Manager : MonoBehaviour
     private bool dismantling = false;
     private bool placingPath = false;
 
-    bool GetMouseDownOnMap()
+    bool GetPointerDownOnMap()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+            }
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        }
+
+        return false;
+    }
+
+    bool GetPointerUpOnMap()
+    {
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Ended)
+            {
+                return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+            }
+        }
+        else if (Input.GetMouseButtonUp(0))
+        {
+            return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+        }
+
+        return false;
+    }
+
+    bool GetPointerClick()
     {
         if (Input.touchCount > 0)
         {
@@ -89,6 +131,31 @@ public class Manager : MonoBehaviour
         return currentWood;
     }
 
+    public int GetOxygen()
+    {
+        return currentO2;
+    }
+
+    public void SetTreeInventory(List<int> treeInventory)
+    {
+        for (int i = 0; i < indexer.trees.Length; i++)
+        {
+            indexer.trees[i].amount = treeInventory[i];
+        }
+    }
+
+    public void SetInventory(int wood, int o2, int gold, List<int> treeInventory)
+    {
+        currentWood = wood;
+        currentO2 = o2;
+        currentGold = gold;
+
+        UpdateUI();
+
+        SetTreeInventory(treeInventory);
+        ui.RebuildMenus();
+    }
+
     public string GetBeetTag()
     {
         return beetTag;
@@ -97,6 +164,11 @@ public class Manager : MonoBehaviour
     public string GetWaterResourceTag()
     {
         return waterResourceTag;
+    }
+
+    public string GetSeedResourceTag()
+    {
+        return seedResourceTag;
     }
 
     public int GetGold()
@@ -112,6 +184,48 @@ public class Manager : MonoBehaviour
             GetRandomYRotation());
         currentTreeID = treeID;
         placingTree = true;
+    }
+
+    public TreeBehavior PlaceTreeByData(TreeData treeData, Beet beet)
+    {
+        TreeBehavior treeBehavior = Instantiate(indexer.trees[treeData.treeSpeciesId].treeOBJ, treeData.position,
+            GetRandomYRotation()).GetComponent<TreeBehavior>();
+
+        treeBehavior.beet = beet;
+        treeBehavior.transform.localScale = Vector3.one * treeData.growth;
+        treeBehavior.OnPlant(treeData.treeSpeciesId);
+
+        return treeBehavior;
+    }
+
+    public void PlaceBuildingByData(BuildingData buildingData)
+    {
+        Building bd = Instantiate(indexer.buildings[buildingData.buildingTypeId].buildingObj,
+            buildingData.weakTransform.position, buildingData.weakTransform.rotation).GetComponent<Building>();
+
+        bd.SetID(buildingData.buildingTypeId);
+
+        switch (buildingData.buildingTag)
+        {
+            case bucketBoysTag:
+        }
+    }
+
+    public void PlaceBeetByData(BeetData beetData)
+    {
+        Beet beet = Instantiate(indexer.buildings[beetData.beetTypeId].buildingObj, beetData.position,
+                Quaternion.identity)
+            .GetComponent<Beet>();
+
+        beet.SetSeeds(beetData.seeds);
+        beet.SetWater(beetData.water);
+        beet.OnPlaceDown();
+
+        foreach (TreeData tree in beetData.trees)
+        {
+            TreeBehavior treeBehavior = PlaceTreeByData(tree, beet);
+            beet.AddTree(treeBehavior);
+        }
     }
 
     public void PlaceBuilding(int id)
@@ -174,7 +288,7 @@ public class Manager : MonoBehaviour
         {
             r = cam.ScreenPointToRay(Input.mousePosition);
         }
-        else if (GetMouseDownOnMap())
+        else if (GetPointerDownOnMap())
         {
             r = cam.ScreenPointToRay(Input.mousePosition);
         }
@@ -190,7 +304,7 @@ public class Manager : MonoBehaviour
             HandleBuildingPlacement(hit);
         }
 
-        if (!Input.GetMouseButtonDown(0)) return;
+        if (!GetPointerClick()) return;
 
         if (dismantling)
         {
@@ -209,7 +323,7 @@ public class Manager : MonoBehaviour
     void HandleTreePlacement(RaycastHit hit)
     {
         currentTreePreview.transform.position = hit.point;
-        if (GetMouseDownOnMap() && !hit.transform.CompareTag(treeTag) && hit.transform.CompareTag(beetTag))
+        if (GetPointerUpOnMap() && !hit.transform.CompareTag(treeTag) && hit.transform.CompareTag(beetTag))
         {
             PlaceTree();
 
@@ -221,12 +335,16 @@ public class Manager : MonoBehaviour
 
             beet.AddTree(treeBehavior);
         }
+        else if (GetPointerUpOnMap())
+        {
+            CancelTreePlacement();
+        }
     }
 
     void HandleBuildingPlacement(RaycastHit hit)
     {
         currentBuildingPreview.transform.position = hit.point;
-        if (GetMouseDownOnMap() && hit.transform.CompareTag(groundTag) && !hit.transform.CompareTag(buildingTag))
+        if (GetPointerUpOnMap() && hit.transform.CompareTag(groundTag) && !hit.transform.CompareTag(buildingTag))
         {
             PlaceBuilding();
         }
@@ -234,7 +352,7 @@ public class Manager : MonoBehaviour
 
     void HandlePathPlacement(RaycastHit hit)
     {
-        if (GetMouseDownOnMap()) //TODO do some tag detection so no paths in weird places ig
+        if (GetPointerDownOnMap()) //TODO do some tag detection so no paths in weird places ig
         {
             GameObject dbgobj = new GameObject();
             Transform tf = dbgobj.transform;
@@ -320,7 +438,7 @@ public class Manager : MonoBehaviour
         {
             obj.GetComponent<TreeBehavior>().OnDismantle();
         }
-        else if (tag == buildingTag)
+        else if (tag == buildingTag || tag == bucketBoysTag)
         {
             obj.GetComponent<Building>().OnDismantle();
         }
@@ -330,8 +448,19 @@ public class Manager : MonoBehaviour
         }
         else if (tag == pathTag)
         {
-            Debug.LogError("Cannot dismantle path (yet)");
+            //Debug.LogError("Cannot dismantle path (yet)");
             //TODO ID independent path dismantling, and handle mannequin behavior upon dismantled spline
+
+            Spline splineToDestroy = map.splineInterface.GetSplineFromIndex(
+                map.splineInterface.splineMesh.GetSplineIndexFromTriangle(hit.triangleIndex));
+            foreach (Mannequin man in map.GetMannequins())
+            {
+                if (man.spline == splineToDestroy)
+                {
+                    man.OnSplineDismantled();
+                }
+            }
+
             map.splineInterface.RemoveSplineSilent(GetSplineIdFromHit(hit));
         }
     }

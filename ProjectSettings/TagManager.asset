@@ -15,6 +15,7 @@ TagManager:
   - Building
   - Path
   - Mannequin
+  - MainBuilding
   layers:
   - Default
   - TransparentFX

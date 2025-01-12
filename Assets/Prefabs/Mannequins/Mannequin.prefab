@@ -175,6 +175,8 @@ MonoBehaviour:
   startProgress: 0
   splineContainer: {fileID: 0}
   maxResourceCapacity: 3
+  manager: {fileID: 0}
+  beanMeshRenderer: {fileID: 3291414888659554431}
 --- !u!65 &6848408726898286790
 BoxCollider:
   m_ObjectHideFlags: 0

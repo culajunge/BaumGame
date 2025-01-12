@@ -22,11 +22,16 @@ public class Mannequin : MonoBehaviour
     private int mannequinResourceAmount;
     public int maxResourceCapacity = 2;
 
+    [HideInInspector] public Manager manager;
+    [SerializeField] MeshRenderer beanMeshRenderer;
+
+    bool isActive = true;
+
     #region Resources
 
     public bool isResourceEmtpy()
     {
-        return String.IsNullOrEmpty(mannequinResourceType);
+        return String.IsNullOrEmpty(mannequinResourceType) && mannequinResourceAmount == 0;
     }
 
     public string GetResourceType()
@@ -45,6 +50,11 @@ public class Mannequin : MonoBehaviour
         mannequinResourceType = resourceType;
 
         print($"Mannequin {gameObject.name} has {mannequinResourceAmount} of {mannequinResourceType}");
+    }
+
+    public void ChangeColor(Color color)
+    {
+        beanMeshRenderer.material.color = color;
     }
 
     public void AddResource(int amount)
@@ -69,6 +79,12 @@ public class Mannequin : MonoBehaviour
         GetComponentInChildren<Animator>().speed = Random.Range(0.9f, 1.1f);
     }
 
+    public void CommitSuicide()
+    {
+        isActive = false;
+        Destroy(gameObject);
+    }
+
     public void ChangeSpline(Spline newSpline, float newProgress, bool movingForward)
     {
         spline = newSpline;
@@ -88,7 +104,7 @@ public class Mannequin : MonoBehaviour
 
     private void Update()
     {
-        if (spline == null) return;
+        if (!isActive || spline == null) return;
 
         float step = (speed * Time.deltaTime) / spline.GetLength();
         progress += movingForward ? step : -step;
@@ -138,8 +154,10 @@ public class Mannequin : MonoBehaviour
                vector.magnitude > float.Epsilon;
     }
 
-    void OnSplineDismantled()
+    public void OnSplineDismantled()
     {
+        print("MANNEQUIN PERMANENTLY DEACTIVATED");
+        isActive = false;
     }
 
     private void CheckForIntersection()

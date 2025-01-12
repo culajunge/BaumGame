@@ -7,18 +7,19 @@ using TMPro;
 
 public class UIBehavior : MonoBehaviour
 {
-    [Header("Refs")]
-    [SerializeField] public cameraMovement camMov;
+    [Header("Refs")] [SerializeField] public cameraMovement camMov;
+
+    //[SerializeField] public PanAndZoom camMov;
     [SerializeField] public GameObject[] screens;
     [SerializeField] private PostProcessVolume ppVolume;
     [SerializeField] private indexer indexer;
-    
+
     [SerializeField] private Transform treeUIParent;
     [SerializeField] GameObject treeUIPrefab;
-    
+
     [SerializeField] Transform buildingUIParent;
     [SerializeField] GameObject buildingUIPrefab;
-    
+
     [SerializeField] Manager manager;
     [SerializeField] Button cancelTreePlacement;
     [SerializeField] Button cancelBuildingPlacement;
@@ -28,14 +29,36 @@ public class UIBehavior : MonoBehaviour
     [SerializeField] private TMP_Text moneyText2;
     [SerializeField] private TMP_Text woodText;
     [SerializeField] private TMP_Text woodText2;
-    
-    
-    
+
+
     List<UITreeItem> treeUIItems = new List<UITreeItem>();
     List<UIBuildingItem> buildingUIItems = new List<UIBuildingItem>();
 
     void Start()
     {
+        InstantiateTreeUIItems();
+        InstantiateBuildingUIItems();
+    }
+
+    public void ClearMenus()
+    {
+        foreach (UITreeItem item in treeUIItems)
+        {
+            Destroy(item.gameObject);
+        }
+
+        treeUIItems.Clear();
+        foreach (UIBuildingItem item in buildingUIItems)
+        {
+            Destroy(item);
+        }
+
+        buildingUIItems.Clear();
+    }
+
+    public void RebuildMenus()
+    {
+        ClearMenus();
         InstantiateTreeUIItems();
         InstantiateBuildingUIItems();
     }
@@ -75,7 +98,7 @@ public class UIBehavior : MonoBehaviour
             item.previewImg = t.treePreview;
             item.name = t.treeName;
             item.amount.text = t.amount.ToString();
-            item.AddOnClickListener(() => OnTreeItemClicked(item.id));
+            item.AddOnPointerDownListener(() => OnTreeItemPointerDown(item.id));
             item.OnInstance();
             treeUIItems.Add(item);
             i++;
@@ -92,17 +115,18 @@ public class UIBehavior : MonoBehaviour
             item.id = i;
             item.previewImg = b.buildingPreview;
             item.name = b.buildingName;
-            
+
             item.woodCost.text = b.woodCost.ToString();
             item.moneyCost.text = b.goldCost.ToString();
             item.title.text = b.buildingName;
-            
-            item.AddOnClickListener(() => OnBuildingItemClicked(item.id));
-            
+
+            //item.AddOnClickListener(() => OnBuildingItemClicked(item.id));
+            item.AddOnPointerDownListener(() => OnBuildingItemPointerDown(item.id));
+
             item.OnInstance();
-            
+
             buildingUIItems.Add(item);
-            
+
             i++;
         }
     }
@@ -124,9 +148,17 @@ public class UIBehavior : MonoBehaviour
 
     public void OnTreeItemClicked(int id)
     {
-
         if (indexer.trees[id].amount <= 0) return;
-        
+
+        ShowOnly(screens[0]);
+        manager.PlaceTree(id);
+        ShowCancelTreePlacementButton(true);
+    }
+
+    public void OnTreeItemPointerDown(int id)
+    {
+        if (indexer.trees[id].amount <= 0) return;
+
         ShowOnly(screens[0]);
         manager.PlaceTree(id);
         ShowCancelTreePlacementButton(true);
@@ -134,12 +166,24 @@ public class UIBehavior : MonoBehaviour
 
     public void OnBuildingItemClicked(int id)
     {
-        if(indexer.buildings[id].woodCost > manager.GetWood() || indexer.buildings[id].goldCost > manager.GetGold()) return;
-        
+        if (indexer.buildings[id].woodCost > manager.GetWood() ||
+            indexer.buildings[id].goldCost > manager.GetGold()) return;
+
         ShowOnly(screens[0]);
         manager.PlaceBuilding(id);
         ShowCancelBuildingPlacementButton(true);
     }
+
+    public void OnBuildingItemPointerDown(int id)
+    {
+        if (indexer.buildings[id].woodCost > manager.GetWood() ||
+            indexer.buildings[id].goldCost > manager.GetGold()) return;
+
+        ShowOnly(screens[0]);
+        manager.PlaceBuilding(id);
+        ShowCancelBuildingPlacementButton(true);
+    }
+
 
     public void ShowCancelTreePlacementButton(bool val)
     {
@@ -172,7 +216,5 @@ public class UIBehavior : MonoBehaviour
     public void OpenTraderMenu()
     {
         ShowOnly(screens[3]);
-        
     }
-    
 }

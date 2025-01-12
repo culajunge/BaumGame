@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Gitversion
 public class cameraMovement : MonoBehaviour
 {
-    //GIT VERSION 
+    public float baseDragSpeed = 1.5f; // Speed of the camera movement
+    public float maxSpeedMultiplier = 2.5f; // Maximum speed multiplier
+    public float smoothSpeed = 0.15f; // Smoothing speed for interpolation
+    public float zoomSpeed = 3.0f; // Speed of zooming
+    public float minZoom = 100.0f; // Minimum field of view (zoom in limit)
+    public float maxZoom = 600.0f; // Maximum field of view (zoom out limit)
 
-    public float baseDragSpeed = 2.0f; // Speed of the camera movement
-    public float maxSpeedMultiplier = 3.0f; // Maximum speed multiplier
-    public float smoothSpeed = 0.125f; // Smoothing speed for interpolation
-    public float zoomSpeed = 5.0f; // Speed of zooming
-    public float minZoom = 15.0f; // Minimum field of view (zoom in limit)
-    public float maxZoom = 60.0f; // Maximum field of view (zoom out limit)
+    public float dragSpeed = 0.5f;
 
     private Vector3 dragOrigin; // Where the dragging started
     private bool isDragging = false;
+    private bool isZooming = false;
     private Vector3 targetPosition; // The position to smoothly move towards
     private float currentDragSpeed;
 
@@ -22,6 +25,12 @@ public class cameraMovement : MonoBehaviour
     [SerializeField] private Transform camDir; // Reference to the camera's direction object
     private Vector3 zoom; // Zoom reference variable
     bool lockedMovement = false;
+    private bool initialTouchRegistered = false;
+    private float lastTouchDeltaMag;
+    private Vector2 lastTouchZeroPos;
+    private Vector2 lastTouchOnePos;
+    private bool skipFirstTwoFingerFrame = true;
+    private Coroutine lockMovementCoroutine;
 
     public void SetMovementLock(bool val)
     {
@@ -55,23 +64,17 @@ public class cameraMovement : MonoBehaviour
         float zoomFactor =
             Mathf.InverseLerp(minZoom, maxZoom, Vector3.Distance(camDir.localPosition, transform.position));
         currentDragSpeed = Mathf.Lerp(baseDragSpeed, baseDragSpeed * maxSpeedMultiplier, zoomFactor);
-
-        //print($"Speed: {currentDragSpeed} \n ZoomFac: {zoomFactor}");
     }
 
     // Handles the input for mouse or touch
     void HandleInput()
     {
-#if !UNITY_EDITOR && UNITY_WEBGL
-        HandleWebGLInput();
-#else
         HandleUniversalInput();
-#endif
     }
 
     void HandleUniversalInput()
     {
-        if (Input.touchCount == 1) // Touch input
+        if (Input.touchCount == 1 && !isZooming) // Touch input and not zooming
         {
             Touch touch = Input.GetTouch(0);
 
@@ -84,11 +87,13 @@ public class cameraMovement : MonoBehaviour
             {
                 Vector3 dragDelta = touch.position - (Vector2)dragOrigin;
 
-                Vector3 move = new Vector3(-dragDelta.x, 0, -dragDelta.y) * currentDragSpeed * Time.deltaTime;
+                Vector3 move = new Vector3(-dragDelta.x, 0, -dragDelta.y) * currentDragSpeed * Time.deltaTime *
+                               dragSpeed;
                 targetPosition += move; // Add the movement to the target position
 
                 dragOrigin = touch.position;
             }
+
             else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
             {
                 isDragging = false;
@@ -128,7 +133,6 @@ public class cameraMovement : MonoBehaviour
         if (scrollData != 0)
         {
             Zoom(scrollData);
-            return;
         }
 
         // Pinch Zoom for Touch Input
@@ -137,32 +141,73 @@ public class cameraMovement : MonoBehaviour
             Touch touchZero = Input.GetTouch(0);
             Touch touchOne = Input.GetTouch(1);
 
-            // Find the position in the previous frame of each touch.
-            Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-            Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+            if (touchZero.phase == TouchPhase.Began || touchOne.phase == TouchPhase.Began)
+            {
+                isDragging = false;
+                isZooming = true;
+                skipFirstTwoFingerFrame = true;
+                lastTouchZeroPos = touchZero.position;
+                lastTouchOnePos = touchOne.position;
+                lastTouchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+                targetPosition = transform.position; // Reset target position when starting to zoom
+                if (lockMovementCoroutine != null)
+                    StopCoroutine(lockMovementCoroutine);
+                lockMovementCoroutine = StartCoroutine(LockMovementTemporarily());
+                return;
+            }
 
-            // Find the magnitude of the vector (distance) between the touches in each frame.
-            float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-            float currentTouchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+            if (!isZooming) return;
 
-            // Find the difference in the distances between each frame.
-            float deltaMagnitudeDiff = prevTouchDeltaMag - currentTouchDeltaMag;
+            if ((touchZero.phase == TouchPhase.Moved || touchOne.phase == TouchPhase.Moved) && !skipFirstTwoFingerFrame)
+            {
+                float currentTouchDeltaMag = (touchZero.position - touchOne.position).magnitude;
+                float deltaMagnitudeDiff = currentTouchDeltaMag - lastTouchDeltaMag;
 
-            // Zoom based on pinch gesture
-            Zoom(deltaMagnitudeDiff * 0.01f); // Adjust multiplier for sensitivity
+                Zoom(deltaMagnitudeDiff * 0.001f);
+
+                lastTouchDeltaMag = currentTouchDeltaMag;
+            }
+
+            skipFirstTwoFingerFrame = false;
+        }
+        else
+        {
+            isZooming = false;
+            skipFirstTwoFingerFrame = true;
         }
     }
 
-    // Method to handle zooming
-    void Zoom(float increment)
+    IEnumerator LockMovementTemporarily()
     {
-        zoom += cam.transform.forward * increment * zoomSpeed;
-        camDir.localPosition = zoom;
-        UpdateDragSpeed();
+        lockedMovement = true;
+        yield return new WaitForSeconds(0.2f); // 100 milliseconds
+        lockedMovement = false;
     }
 
-    void HandleWebGLInput()
+    // Method to handle zooming with limits
+    void Zoom(float increment)
     {
-        HandleUniversalInput();
+        // Update the zoom position
+        zoom += cam.transform.forward * increment * zoomSpeed;
+
+        // Calculate the new distance from the camera to the zoom target
+        float distance = zoom.magnitude;
+
+        // Clamp the zoom level within the bounds
+
+        if (distance < minZoom)
+        {
+            zoom = zoom.normalized * minZoom; // Maintain direction but limit distance
+        }
+        else if (distance > maxZoom)
+        {
+            zoom = zoom.normalized * maxZoom; // Maintain direction but limit distance
+        }
+
+        // Update the camera's local position
+        camDir.localPosition = zoom;
+
+        // Update drag speed based on the new zoom level
+        UpdateDragSpeed();
     }
 }

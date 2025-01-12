@@ -66,6 +66,7 @@ public class Building : MonoBehaviour
 
     public virtual void OnDismantle()
     {
+        print("Wanna dismantle building");
         map map = GameObject.FindFirstObjectByType<map>();
         map.RemoveBuilding(gameObject);
 
