@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Timers;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Splines;
+using Debug = System.Diagnostics.Debug;
 
 public class map : MonoBehaviour
 {
@@ -90,6 +94,11 @@ public class map : MonoBehaviour
         beetsList[id] = null;
     }
 
+    public void RemoveBeet(Beet beet)
+    {
+        beetsList.Remove(beet);
+    }
+
     public int GetO2Emission()
     {
         if (!dayNightCycle.IsDay()) return 0;
@@ -173,14 +182,14 @@ public class map : MonoBehaviour
 
     #region Save Data
 
-    List<WeakTransformData> SplineKnotsToWeakTransforms(Spline spline)
+    List<KnotData> SplineKnotsToWeakTransforms(Spline spline)
     {
-        List<WeakTransformData> transforms = new List<WeakTransformData>();
+        List<KnotData> transforms = new List<KnotData>();
 
         foreach (BezierKnot knot in spline.Knots)
         {
-            WeakTransformData transformData = new WeakTransformData(knot.Position, knot.Rotation);
-            transforms.Add(transformData);
+            KnotData knotData = new KnotData(knot.Position, splineInterface.GetBezierKnotNormal(knot, Vector3.up));
+            transforms.Add(knotData);
         }
 
         return transforms;
@@ -237,6 +246,7 @@ public class map : MonoBehaviour
                 data.shredderData = new ShredderData
                 {
                     seeds = shredder.GetSeeds(),
+                    compostResultType = shredder.GetCompostResultTag(),
                 };
             }
 
@@ -249,7 +259,7 @@ public class map : MonoBehaviour
             BeetData beetData = new BeetData
             {
                 beetTypeId = beet.GetBeetTypeId(),
-                position = beet.transform.position,
+                position = beet.beetConnector.transform.position,
                 seeds = beet.GetSeeds(),
                 water = beet.GetWater()
             };
@@ -309,6 +319,22 @@ public class map : MonoBehaviour
         string json = File.ReadAllText(path);
         GameSaveData saveData = JsonUtility.FromJson<GameSaveData>(json);
 
+        foreach (BeetData beet in saveData.beetData)
+        {
+            manager.PlaceBeetByData(beet);
+        }
+
+        foreach (BuildingData building in saveData.buildingData)
+        {
+            manager.PlaceBuildingByData(building);
+        }
+
+        foreach (PathData pathData in saveData.pathData)
+        {
+            manager.PlaceSplineByData(pathData);
+        }
+
+        manager.SetInventory(saveData.wood, saveData.oxygen, saveData.gold, saveData.treeInventory);
 
         timer.Stop();
         print($"Game loaded in {timer.ElapsedMilliseconds}ms from {path}");
@@ -316,17 +342,19 @@ public class map : MonoBehaviour
 
     private void ClearAllExistingObjects()
     {
-        manager.SetInventory(0, 0, 0, new List<int>(manager.indexer.trees.Length));
+        //manager.SetInventory(0, 0, 0, new List<int>(manager.indexer.trees.Length));
 
-        foreach (Beet beet in beetsList)
+        for (int i = buildingsList.Count - 1; i >= 0; i--)
         {
-            beet.beetConnector.OnDismantle();
-        }
-
-        foreach (GameObject bd in buildingsList)
-        {
+            GameObject bd = buildingsList[i];
             if (bd.CompareTag(manager.GetBeetTag())) continue;
             bd.GetComponent<Building>().OnDismantle();
+        }
+
+        for (int i = beetsList.Count - 1; i >= 0; i--)
+        {
+            Beet bt = beetsList[i];
+            bt.beetConnector.OnDismantle();
         }
 
         foreach (Mannequin mannequin in mannequins)

@@ -7,7 +7,7 @@ public class Beet : MonoBehaviour
     Manager manager;
     List<TreeBehavior> trees = new List<TreeBehavior>();
     public bool enoughWater = false;
-    [HideInInspector] public BeetConnector beetConnector;
+    public BeetConnector beetConnector;
 
     [SerializeField] GameObject waterShortageInformer;
     [SerializeField] private int maxSeeds = 25;

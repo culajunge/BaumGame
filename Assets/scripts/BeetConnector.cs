@@ -14,7 +14,6 @@ public class BeetConnector : Building
     public override void OnPlaceDown()
     {
         base.OnPlaceDown();
-        beet.beetConnector = this;
         beet.OnPlaceDown();
     }
 
@@ -30,6 +29,9 @@ public class BeetConnector : Building
 
     public override void OnDismantle()
     {
+        map map = GameObject.FindFirstObjectByType<map>();
+        map.RemoveBeet(beet);
+
         base.OnDismantle();
 
         print("Dismantle beet");

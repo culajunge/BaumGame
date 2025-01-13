@@ -72,8 +72,13 @@ public class SplineInterface : MonoBehaviour
         }
     }
 
+    public Spline GetCurrentSpline()
+    {
+        return currentSpline;
+    }
+
     public int AddSplineOrKnot(Vector3 position, Vector3 normal, bool newSpline = false, bool offset = false,
-        int connectToSplineIndex = -1)
+        int connectToSplineIndex = -1, bool extensiveEqualPointsCheck = false)
     {
         publicFirstPlace = false;
         if (newSpline || splineContainer.Splines.Count <= 0 || firstPlace)
@@ -123,26 +128,25 @@ public class SplineInterface : MonoBehaviour
                     }
                 }
 
+                BezierKnot connectionKnot;
                 // If we're very close to an existing knot, use that index
                 int insertIndex;
                 if (minKnotDistance < snapThreshold)
                 {
                     insertIndex = closestKnotIndex;
+                    connectionKnot = splineToConnect[closestKnotIndex];
+                    print("Joined spline & knots");
                 }
                 else
                 {
                     insertIndex = Mathf.Clamp(Mathf.CeilToInt(t * segmentCount), 0, segmentCount);
+                    connectionKnot = new BezierKnot(nearest);
+                    // Create knot at intersection point on target spline
+                    splineToConnect.Insert(insertIndex, connectionKnot);
+                    print("Joined spline");
                 }
 
-                print(
-                    $"Insert index: {insertIndex.ToString()}/{(segmentCount + 2).ToString()}, Distance to nearest knot: {minKnotDistance}");
-
                 #endregion
-
-                // Create knot at intersection point on target spline
-                BezierKnot connectionKnot = new BezierKnot(nearest);
-                splineToConnect.Insert(insertIndex, connectionKnot);
-
 
                 // Add knot to current spline
                 latestKnot = AddKnot(splineIndex, splineContainer.Splines[splineIndex].Count, nearest, normal, offset);
@@ -299,8 +303,30 @@ public class SplineInterface : MonoBehaviour
         return knot;
     }
 
+    public Vector3 GetBezierKnotNormal(BezierKnot knot, Vector3 upDirection)
+    {
+        Vector3 tangentDirection = (knot.Position + knot.TangentOut) - (knot.Position + knot.TangentIn);
+
+        // Handle case where tangents are coincident
+        if (tangentDirection.magnitude < 0.001f)
+        {
+            return upDirection;
+        }
+
+        Vector3 normal = Vector3.Cross(tangentDirection.normalized, upDirection).normalized;
+
+        // Handle case where tangent is parallel to up vector
+        if (normal.magnitude < 0.001f)
+        {
+            normal = Vector3.Cross(tangentDirection.normalized, Vector3.right).normalized;
+        }
+
+        return normal;
+    }
+
     public void ClearAllSplines()
     {
+        splineMesh.Clear();
         foreach (Spline spline in splineContainer.Splines)
         {
             spline.Clear();

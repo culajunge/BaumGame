@@ -16,6 +16,8 @@ TagManager:
   - Path
   - Mannequin
   - MainBuilding
+  - WorkerTent
+  - Shredder
   layers:
   - Default
   - TransparentFX

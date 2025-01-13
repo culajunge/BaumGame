@@ -13,6 +13,11 @@ public class civilTent : Building
         return mannequins;
     }
 
+    public void SetAssociatedMannequins(int amount)
+    {
+        mannequins = amount;
+    }
+
     public override void OnPlaceDown()
     {
         base.OnPlaceDown();
@@ -29,6 +34,12 @@ public class civilTent : Building
 
         if (splineInterface == null) Debug.LogError("SplineInterface not found");
 
+        StartCoroutine(SpawnMannequinsDelayed(spline, isStart, .2f));
+    }
+
+    IEnumerator SpawnMannequinsDelayed(Spline spline, bool isStart, float delaySeconds)
+    {
+        yield return new WaitForSeconds(delaySeconds);
         splineInterface.SpawnMannequinsSafelyOnCurrentSpline(spline, isStart ? 0f : 1f, mannequins, isStart);
     }
 }

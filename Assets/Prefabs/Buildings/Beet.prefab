@@ -251,8 +251,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enoughWater: 0
-  beetConnector: {fileID: 0}
+  beetConnector: {fileID: 4756754007459409477}
   waterShortageInformer: {fileID: 5597693635725404546}
+  maxSeeds: 25
 --- !u!1 &7705016707161304333
 GameObject:
   m_ObjectHideFlags: 0

@@ -56,6 +56,15 @@ namespace Unity.Splines.Examples
 
         [SerializeField] float m_TextureScale = 1f;
 
+        public void Clear()
+        {
+            m_Positions.Clear();
+            m_Normals.Clear();
+            m_Textures.Clear();
+            m_Indices.Clear();
+            m_Mesh.Clear();
+        }
+
         public IReadOnlyList<Spline> splines => LoftSplines;
 
         public IReadOnlyList<Spline> LoftSplines

@@ -129,7 +129,6 @@ public class Mannequin : MonoBehaviour
         if (!IsValidVector3(splinePosition))
         {
             print("NON VALID POSITION!");
-            OnSplineDismantled();
             return;
         }
 

@@ -23,6 +23,7 @@ public class Manager : MonoBehaviour
     [SerializeField] const string pathTag = "Path";
     [SerializeField] const string bucketBoysTag = "BucketBoys";
     [SerializeField] const string shredderTag = "Shredder";
+    [SerializeField] private const string workerTentTag = "WorkerTent";
 
     [SerializeField] public Color emptyColor;
     [SerializeField] public const string waterResourceTag = "water";
@@ -195,6 +196,8 @@ public class Manager : MonoBehaviour
         treeBehavior.transform.localScale = Vector3.one * treeData.growth;
         treeBehavior.OnPlant(treeData.treeSpeciesId);
 
+        map.AddTree(treeData.treeSpeciesId, treeBehavior.gameObject);
+
         return treeBehavior;
     }
 
@@ -208,24 +211,41 @@ public class Manager : MonoBehaviour
         switch (buildingData.buildingTag)
         {
             case bucketBoysTag:
+                BucketBoys bb = bd.GetComponent<BucketBoys>();
+                bb.SetWater(buildingData.bucketBoysData.water);
+                break;
+            case workerTentTag:
+                civilTent ct = bd.GetComponent<civilTent>();
+                ct.SetAssociatedMannequins(buildingData.workerTentData.associatedMannequins);
+                break;
+            case shredderTag:
+                shredder sd = bd.GetComponent<shredder>();
+                sd.SetSeeds(buildingData.shredderData.seeds);
+                sd.SetCompostResultTag(buildingData.shredderData.compostResultType);
+                break;
         }
+
+        map.AddBuilding(buildingData.buildingTypeId, bd.gameObject);
+        bd.OnPlaceDown();
     }
 
     public void PlaceBeetByData(BeetData beetData)
     {
         Beet beet = Instantiate(indexer.buildings[beetData.beetTypeId].buildingObj, beetData.position,
                 Quaternion.identity)
-            .GetComponent<Beet>();
+            .GetComponent<BeetConnector>().beet;
 
         beet.SetSeeds(beetData.seeds);
         beet.SetWater(beetData.water);
-        beet.OnPlaceDown();
+        beet.beetConnector.OnPlaceDown();
 
         foreach (TreeData tree in beetData.trees)
         {
             TreeBehavior treeBehavior = PlaceTreeByData(tree, beet);
             beet.AddTree(treeBehavior);
         }
+
+        map.AddBeet(beet);
     }
 
     public void PlaceBuilding(int id)
@@ -236,6 +256,83 @@ public class Manager : MonoBehaviour
             ScreenSpaceToWorldPoint(Input.mousePosition), indexer.buildings[id].buildingObj.transform.rotation);
         currentBuildingID = id;
         placingBuilding = true;
+    }
+
+    public void PlaceSplineByData(PathData pathData)
+    {
+        bool firstKnot = true;
+
+        foreach (KnotData knotData in pathData.knots)
+        {
+            PlacePathKnotByData(knotData, firstKnot);
+            firstKnot = false;
+        }
+    }
+
+    private float rayAbovePointHeight = 5;
+    float autoRayLength = 6;
+
+    public void PlacePathKnotByData(KnotData knotData, bool onNewSpline = false)
+    {
+        RaycastHit hit;
+
+        /*Ray r = new Ray((knotData.position + knotData.normal.normalized * rayAbovePointHeight),
+            -knotData.normal.normalized * autoRayLength);*/ //fancy shit that doesn't work
+
+        Ray r = new Ray(knotData.position + Vector3.up * rayAbovePointHeight, (Vector3.down * autoRayLength));
+        Debug.DrawRay(r.origin, r.direction.normalized * autoRayLength, Color.yellow, 10000);
+
+        if (!Physics.Raycast(r, out hit))
+        {
+            Debug.LogWarning("Auto knot builder error: No hit");
+            GameObject noHitErrorObj = new GameObject("No hit error");
+            noHitErrorObj.transform.position = r.origin;
+            noHitErrorObj.transform.up = r.direction;
+            return;
+        }
+
+        hit.point = knotData.position;
+        bool offset = false;
+        bool autoExit = false;
+
+
+        int connectToSplineIndex = -2;
+        var (curspline, isPublicFirstPlace) = GetSplineWithEnds();
+
+        if (hit.collider.gameObject.TryGetComponent<Building>(out Building bd))
+        {
+            Vector3? point = bd.GetNearestPathConnector(hit.point)?.position;
+            if (point == Vector3.zero || point == null) return;
+            hit.point = (Vector3)point;
+            bd.OnPathConnect(curspline, isPublicFirstPlace);
+
+            autoExit = true;
+        }
+        else if (hit.collider.gameObject.TryGetComponent<Beet>(out Beet bt))
+        {
+            Vector3? point = bt.beetConnector.GetNearestPathConnector(hit.point)?.position;
+            if (point == Vector3.zero || point == null) return;
+            hit.point = (Vector3)point;
+            bt.beetConnector.OnPathConnect(curspline, isPublicFirstPlace);
+            autoExit = true;
+        }
+        else if (hit.collider.transform.CompareTag(pathTag))
+        {
+            int splineIndex = GetSplineIdFromHit(hit);
+            var hitSpline = map.splineInterface.splineMesh.LoftSplines[splineIndex];
+            connectToSplineIndex = splineIndex;
+        }
+        else
+        {
+            print($"Debug hit {hit.transform.name}, Tag: {hit.transform.tag}");
+        }
+
+        offset = false; // always false because offset already saved
+
+        int splineID =
+            map.splineInterface.AddSplineOrKnot(hit.point, map.GetTerrainNormal(knotData.position), onNewSpline,
+                offset: offset,
+                connectToSplineIndex: connectToSplineIndex, true);
     }
 
     Quaternion GetRandomYRotation()

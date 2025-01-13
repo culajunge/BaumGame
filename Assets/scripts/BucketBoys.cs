@@ -18,6 +18,11 @@ public class BucketBoys : Building
         return currentWater;
     }
 
+    public void SetWater(int amount)
+    {
+        currentWater = amount;
+    }
+
     public override void OnPlaceDown()
     {
         base.OnPlaceDown();

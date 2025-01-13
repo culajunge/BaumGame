@@ -59,8 +59,8 @@
     <Compile Include="Assets\scripts\TraderTent.cs" />
     <Compile Include="Assets\scripts\inventory.cs" />
     <Compile Include="Assets\scripts\map.cs" />
-    <Compile Include="Assets\scripts\intersectionCollider.cs" />
     <Compile Include="Assets\scripts\GameSaveData.cs" />
+    <Compile Include="Assets\scripts\intersectionCollider.cs" />
     <Compile Include="Assets\scripts\Beet.cs" />
     <Compile Include="Assets\ScriptOBJs\Buildings\building.cs" />
     <Compile Include="Assets\scripts\cameraMovement.cs" />
