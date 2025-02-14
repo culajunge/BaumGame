@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
 
 public class UIBehavior : MonoBehaviour
 {
@@ -30,14 +31,26 @@ public class UIBehavior : MonoBehaviour
     [SerializeField] private TMP_Text woodText;
     [SerializeField] private TMP_Text woodText2;
 
+    [SerializeField] Animator toolsMenuAnimator;
+    [SerializeField] private float toggleAnimationClipLength = 15f / 60f;
+
 
     List<UITreeItem> treeUIItems = new List<UITreeItem>();
     List<UIBuildingItem> buildingUIItems = new List<UIBuildingItem>();
+    private static readonly int Open = Animator.StringToHash("open");
 
     void Start()
     {
-        InstantiateTreeUIItems();
+        //InstantiateTreeUIItems();
+        //InstantiateBuildingUIItems();
+
+        animators.Add(toolsMenuAnimator);
+    }
+
+    public void CreateUiItemsUponNoLoad()
+    {
         InstantiateBuildingUIItems();
+        InstantiateTreeUIItems();
     }
 
     public void ClearMenus()
@@ -48,9 +61,10 @@ public class UIBehavior : MonoBehaviour
         }
 
         treeUIItems.Clear();
+
         foreach (UIBuildingItem item in buildingUIItems)
         {
-            Destroy(item);
+            Destroy(item.gameObject);
         }
 
         buildingUIItems.Clear();
@@ -61,6 +75,141 @@ public class UIBehavior : MonoBehaviour
         ClearMenus();
         InstantiateTreeUIItems();
         InstantiateBuildingUIItems();
+    }
+
+    private List<Animator> animators = new List<Animator>();
+
+    public void ToggleToolsMenu()
+    {
+        bool isToolsMenuOpen = toolsMenuAnimator.GetBool(Open);
+
+        if (!isToolsMenuOpen)
+        {
+            // Opening tools menu - close all other menus first
+            CloseAllExcept(toolsMenuAnimator.gameObject);
+            ToggleMenu(toolsMenuAnimator, true, true);
+        }
+        else
+        {
+            // Closing tools menu - close all sub-menus too
+            CloseAllMenus();
+        }
+    }
+
+    public void ToggleToolsMenu2()
+    {
+        ToggleMenu(toolsMenuAnimator);
+    }
+
+    public void ToggleSubMenu(Animator submenuAnimator)
+    {
+        // Only allow toggling submenu if tools menu is open
+        if (toolsMenuAnimator.GetBool(Open))
+        {
+            ToggleMenu(submenuAnimator);
+        }
+        else
+        {
+            // First open tools menu, then open submenu
+            ToggleMenu(toolsMenuAnimator, true, true);
+            StartCoroutine(OpenSubmenuNextFrame(submenuAnimator));
+        }
+    }
+
+    // Replace your existing VToggleMenu with this
+    public void VToggleMenu(Animator animator)
+    {
+        // If it's the main tools menu, use ToggleToolsMenu behavior
+        if (animator == toolsMenuAnimator)
+        {
+            ToggleToolsMenu();
+        }
+        // Otherwise treat it as a submenu
+        else
+        {
+            ToggleSubMenu(animator);
+        }
+    }
+
+    private IEnumerator OpenSubmenuNextFrame(Animator submenuAnimator)
+    {
+        yield return null;
+        ToggleMenu(submenuAnimator, true, true);
+    }
+
+    // Your existing methods remain the same...
+    public void CloseAllMenus()
+    {
+        foreach (Animator animator in animators)
+        {
+            ToggleMenu(animator, true, false);
+        }
+    }
+
+    public void CloseAllExcept(GameObject obj)
+    {
+        foreach (Animator animator in animators)
+        {
+            if (animator.gameObject == obj) continue;
+            ToggleMenu(animator, true, false);
+        }
+    }
+
+    bool ToggleMenu(Animator animator, bool shouldOverrideVal = false, bool overrideVal = false)
+    {
+        bool newState = shouldOverrideVal ? overrideVal : !animator.GetBool(Open);
+
+        if (newState)
+        {
+            animator.gameObject.SetActive(true);
+            StartCoroutine(SetAnimatorBoolNextFrame(animator, "open", true));
+        }
+        else
+        {
+            animator.SetBool(Open, false);
+            ToggleMenuActivity(animator, toggleAnimationClipLength, false);
+        }
+
+        if (!animators.Contains(animator))
+        {
+            animators.Add(animator);
+        }
+
+        return newState;
+    }
+
+    private IEnumerator SetAnimatorBoolNextFrame(Animator animator, string paramName, bool value)
+    {
+        // Wait for the next frame
+        yield return null;
+        animator.SetBool(paramName, value);
+    }
+
+    public void ToggleBuildMenu(Animator animator)
+    {
+        ToggleMenu(animator);
+        ToggleMenu(toolsMenuAnimator);
+    }
+
+    public bool ToggleMenuActivity(Animator animator, float clipLength, bool val)
+    {
+        bool state = val;
+        if (state)
+        {
+            animator.gameObject.SetActive(true);
+        }
+        else
+        {
+            StartCoroutine(SetInactiveAfterTimeS(animator.gameObject, clipLength));
+        }
+
+        return state;
+    }
+
+    IEnumerator SetInactiveAfterTimeS(GameObject obj, float s)
+    {
+        yield return new WaitForSeconds(s);
+        obj.SetActive(false);
     }
 
     public void Show(GameObject screen)

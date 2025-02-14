@@ -20,7 +20,10 @@ public class Mannequin : MonoBehaviour
 
     private string mannequinResourceType;
     private int mannequinResourceAmount;
+    public resourceItem mannequinResource;
     public int maxResourceCapacity = 2;
+
+    private string lastMannequinResourceType;
 
     [HideInInspector] public Manager manager;
     [SerializeField] MeshRenderer beanMeshRenderer;
@@ -32,6 +35,11 @@ public class Mannequin : MonoBehaviour
     public bool isResourceEmtpy()
     {
         return String.IsNullOrEmpty(mannequinResourceType) && mannequinResourceAmount == 0;
+    }
+
+    public string GetLastResourceType()
+    {
+        return lastMannequinResourceType;
     }
 
     public string GetResourceType()
@@ -46,20 +54,22 @@ public class Mannequin : MonoBehaviour
 
     public void SetResource(string resourceType, int resourceAmount)
     {
+        lastMannequinResourceType = mannequinResourceType;
+
         mannequinResourceAmount = resourceAmount;
         mannequinResourceType = resourceType;
 
         print($"Mannequin {gameObject.name} has {mannequinResourceAmount} of {mannequinResourceType}");
     }
 
-    public void ChangeColor(Color color)
-    {
-        beanMeshRenderer.material.color = color;
-    }
-
     public void AddResource(int amount)
     {
         mannequinResourceAmount += amount;
+    }
+
+    public void ChangeColor(Color color)
+    {
+        beanMeshRenderer.material.color = color;
     }
 
     #endregion

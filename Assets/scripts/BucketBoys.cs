@@ -50,16 +50,13 @@ public class BucketBoys : Building
 
     public override void OnMannequinCollision(Mannequin mannequin)
     {
-        if (!mannequin.isResourceEmtpy() && mannequin.GetResourceType() != GetManager().GetWaterResourceTag()) return;
-
-        int mannequinResourceAmount = mannequin.GetResourceAmount();
-        int mannequinResourceCapacity = mannequin.maxResourceCapacity;
-        int demand = mannequinResourceCapacity - mannequin.GetResourceAmount();
-
-        int transferAmount = Mathf.Min(demand, currentWater);
-        currentWater -= transferAmount;
-        mannequin.SetResource(GetManager().GetWaterResourceTag(), mannequinResourceAmount + transferAmount);
-        mannequin.ChangeColor(GetManager().waterColor);
+        resourceItem resource =
+            new resourceItem(GetManager().GetWaterResourceTag(), currentWater, GetManager().waterColor);
+        var (newResource, changedResource) = TransferResourceToMannequin(resource, mannequin);
+        if (changedResource)
+        {
+            currentWater = newResource.itemAmount;
+        }
 
         UpdateWaterLevel();
     }

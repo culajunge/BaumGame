@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9925d8473669b0b429cf46d1470b2038, type: 3}
   m_Name: BucketBoys
   m_EditorClassIdentifier: 
-  buildingName: Bucket Boys
-  buildingPreview: {fileID: 21300000, guid: 5ab9b3437418cdd4db5bcad0e180302a, type: 3}
+  buildingName: Well
+  buildingPreview: {fileID: 21300000, guid: 4b2ac9cd8de38ca48a767008112299b4, type: 3}
   woodCost: 15
   goldCost: 5
   buildingObj: {fileID: 6198458252872288731, guid: 3a19322e512d0094a819a7a721b0279a, type: 3}

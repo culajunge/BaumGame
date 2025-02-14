@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9925d8473669b0b429cf46d1470b2038, type: 3}
-  m_Name: Beet mid
+  m_Name: ResearchLab
   m_EditorClassIdentifier: 
-  buildingName: Beet normal
-  buildingPreview: {fileID: 21300000, guid: 2c63609699625e045b5f66e0764c6644, type: 3}
-  woodCost: 10
-  goldCost: 0
-  buildingObj: {fileID: 4378039222524845322, guid: 9fb0cb373e2841249a922d7eadcae563, type: 3}
+  buildingName: Research
+  buildingPreview: {fileID: 21300000, guid: cd3485cebed12cd49af50a465f6a01e8, type: 3}
+  woodCost: 15
+  goldCost: 10
+  buildingObj: {fileID: 1585368448610091908, guid: af7ae7ebae43fda4cbc4416327ea02cb, type: 3}

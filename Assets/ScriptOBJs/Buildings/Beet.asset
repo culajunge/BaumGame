@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9925d8473669b0b429cf46d1470b2038, type: 3}
   m_Name: Beet
   m_EditorClassIdentifier: 
-  buildingName: Beet klein
-  buildingPreview: {fileID: 21300000, guid: 2c63609699625e045b5f66e0764c6644, type: 3}
+  buildingName: Bed
+  buildingPreview: {fileID: 21300000, guid: 4ce87d6544a38bb4b986fc898005e835, type: 3}
   woodCost: 5
   goldCost: 0
   buildingObj: {fileID: 7801395368506263371, guid: 175ad74c662478e4ba593d0f372e8d62, type: 3}

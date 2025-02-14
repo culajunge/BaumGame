@@ -72,29 +72,22 @@ public class Beet : MonoBehaviour
 
     public void OnMannequinCollsion(Mannequin mannequin)
     {
-        print($"{mannequin.GetResourceType()} Mannequin collided");
-        int amount = mannequin.GetResourceAmount();
-        if ((mannequin.isResourceEmtpy() || mannequin.GetResourceType() == manager.GetSeedResourceTag()) && seeds > 0)
+        //dem mannequin seeds andrehen
+        resourceItem resource = new resourceItem(manager.GetSeedResourceTag(), seeds, manager.seedColor);
+        var (newResource, changedResource) =
+            beetConnector.TransferResourceToMannequin(resource, mannequin, manager.GetWaterResourceTag());
+        if (changedResource)
         {
-            int mannequinResourceAmount = amount;
-            int mannequinResourceCapacity = mannequin.maxResourceCapacity;
-            int demand = mannequinResourceCapacity - mannequin.GetResourceAmount();
-
-            int transferAmount = Mathf.Min(demand, seeds);
-            seeds -= transferAmount;
-            mannequin.SetResource(manager.GetSeedResourceTag(), mannequinResourceAmount + transferAmount);
-            mannequin.ChangeColor(manager.seedColor);
+            seeds = newResource.itemAmount;
             return;
         }
 
-        if (mannequin.GetResourceType() != manager.GetWaterResourceTag()) return;
-
-        AddWater(amount);
-        mannequin.SetResource("", 0);
-        mannequin.ChangeColor(manager.emptyColor);
-        print($"Reset Mannequin, thanks for {amount} water");
-        IsWaterShortage();
+        //dem mannequin water stibitzen
+        resource = new resourceItem(manager.GetWaterResourceTag(), water, manager.waterColor);
+        (newResource, changedResource) = beetConnector.TransferResourceFromMannequin(resource, mannequin);
+        water = newResource.itemAmount;
     }
+
 
     public bool IsWaterShortage()
     {
@@ -102,6 +95,21 @@ public class Beet : MonoBehaviour
 
         waterShortageInformer.SetActive(!enoughWater);
         return !enoughWater;
+    }
+
+    public int GetOxygen()
+    {
+        if (!enoughWater) return 0;
+
+        int oxygen = 0;
+        foreach (TreeBehavior tree in trees)
+        {
+            oxygen += tree.GetOxygenProduction();
+        }
+
+        print($"Beet has {oxygen} oxygen");
+
+        return oxygen;
     }
 
     public void GrowTreesAnCollectSeeds()

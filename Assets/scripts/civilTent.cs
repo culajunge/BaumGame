@@ -7,6 +7,7 @@ public class civilTent : Building
 {
     [SerializeField] int mannequins = 1;
     SplineInterface splineInterface;
+    private bool spawnedManneqins = false;
 
     public int GetAssociatedMannequins()
     {
@@ -30,6 +31,7 @@ public class civilTent : Building
 
     public override void OnPathConnect(Spline spline = null, bool isStart = false)
     {
+        if (spawnedManneqins) return;
         splineInterface = FindFirstObjectByType<SplineInterface>().GetComponent<SplineInterface>();
 
         if (splineInterface == null) Debug.LogError("SplineInterface not found");
@@ -39,7 +41,8 @@ public class civilTent : Building
 
     IEnumerator SpawnMannequinsDelayed(Spline spline, bool isStart, float delaySeconds)
     {
+        spawnedManneqins = true;
         yield return new WaitForSeconds(delaySeconds);
-        splineInterface.SpawnMannequinsSafelyOnCurrentSpline(spline, isStart ? 0f : 1f, mannequins, isStart);
+        splineInterface.SpawnMannequinsSafelyOnCurrentSpline(ref spline, isStart ? 0f : 1f, mannequins, isStart);
     }
 }

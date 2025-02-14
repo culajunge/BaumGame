@@ -17,4 +17,11 @@ public class tree : ScriptableObject
     public float growLimit;
     public int waterConsumption;
     public int O2Emission;
+
+    public void SetTreeBehaviorData()
+    {
+        TreeBehavior treeBehavior = treeOBJ.GetComponent<TreeBehavior>();
+        treeBehavior.SetOxygenProduction(O2Emission);
+        treeBehavior.level = level;
+    }
 }

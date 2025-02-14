@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 public class Building : MonoBehaviour
 {
     [SerializeField] public PathConnector[] pathConnectors;
+    private bool connectMultiple = true;
 
     [System.Serializable]
     public class PathConnector
@@ -37,6 +38,7 @@ public class Building : MonoBehaviour
     void ToggleIgnoreRaycastLayer(bool ignore)
     {
         gameObject.layer = ignore ? 2 : 0;
+        print("Toggled Ignore Raycast Layer, ignore: " + ignore);
     }
 
     void CreateMannequinColliders()
@@ -75,6 +77,47 @@ public class Building : MonoBehaviour
         Destroy(gameObject);
     }
 
+    public virtual (resourceItem, bool) TransferResourceToMannequin(resourceItem resource, Mannequin mannequin,
+        string restistanceResourceType = "")
+    {
+        bool changedResource = false;
+
+        if (restistanceResourceType != "" && mannequin.GetLastResourceType() == restistanceResourceType)
+        {
+            return (resource, false);
+        }
+
+        if ((mannequin.isResourceEmtpy() || mannequin.GetResourceType() == resource.itemNameTag) &&
+            resource.AmountAboveZero())
+        {
+            int amountMannequin = mannequin.GetResourceAmount();
+            int mannequinCapacity = mannequin.maxResourceCapacity;
+            int demand = mannequinCapacity - mannequin.GetResourceAmount();
+
+            int transferAmount = Mathf.Min(resource.GetItemAmount(), demand);
+            resource.itemAmount -= transferAmount;
+            mannequin.SetResource(resource.itemNameTag, amountMannequin + transferAmount);
+            mannequin.ChangeColor(resource.GetResourceColor());
+
+            print($"{transferAmount} {resource.itemNameTag} transfered to Mannequin({mannequin.gameObject.name})");
+            changedResource = true;
+        }
+
+        return (resource, changedResource);
+    }
+
+    public virtual (resourceItem, bool) TransferResourceFromMannequin(resourceItem resource, Mannequin mannequin)
+    {
+        if (!resource.CompareItems(mannequin.GetResourceType())) return (resource, false);
+
+        resource.itemAmount += mannequin.GetResourceAmount();
+        print($"{mannequin.GetResourceAmount()} {resource.itemNameTag} transfered to {gameObject.name}");
+        mannequin.SetResource("", 0);
+        mannequin.ChangeColor(manager.emptyColor);
+
+        return (resource, true);
+    }
+
     [CanBeNull]
     public Transform GetNearestPathConnector(Vector3 position)
     {
@@ -86,7 +129,7 @@ public class Building : MonoBehaviour
         foreach (PathConnector pathConnector in pathConnectors)
         {
             index++;
-            if (pathConnector.isConnected) continue;
+            if (pathConnector.isConnected && !connectMultiple) continue;
             Transform pathConnectorTransform = pathConnector.transform;
             float dist = Vector3.Distance(pathConnectorTransform.position, position);
             if (dist < minDist)

@@ -6,11 +6,12 @@ public class indexer : MonoBehaviour
 {
     public tree[] trees;
     public static tree[] staticTrees;
-    
+
     public building[] buildings;
 
-    void Start()
+    public void OnStart()
     {
         staticTrees = trees;
+        print("Indexer initialized");
     }
 }

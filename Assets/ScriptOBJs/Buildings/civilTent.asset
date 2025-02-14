@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9925d8473669b0b429cf46d1470b2038, type: 3}
   m_Name: civilTent
   m_EditorClassIdentifier: 
-  buildingName: Worker Tent
-  buildingPreview: {fileID: 21300000, guid: 1aa38bebd61d84a418c3127e3ec18ca6, type: 3}
+  buildingName: Worker
+  buildingPreview: {fileID: 21300000, guid: d44f7dd37703f0e4d9517b5c69c86991, type: 3}
   woodCost: 5
   goldCost: 10
   buildingObj: {fileID: 7492634416128273676, guid: a7362a3eb279d7945abada1753116dbc, type: 3}

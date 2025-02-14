@@ -103,16 +103,16 @@ public class map : MonoBehaviour
     {
         if (!dayNightCycle.IsDay()) return 0;
 
-        float totalO2Emission = 0;
+        int totalO2Emission = 0;
 
-        for (int i = 0; i < treeIDs.Count; i++)
+
+        foreach (Beet beet in beetsList)
         {
-            if (treeIDs[i] == -1) continue;
-
-            totalO2Emission += manager.indexer.trees[treeIDs[i]].O2Emission;
+            totalO2Emission += beet.GetOxygen();
         }
 
-        return Mathf.RoundToInt(totalO2Emission);
+        print($"totalO2Emission: {totalO2Emission}");
+        return totalO2Emission;
     }
 
     public void GrowTrees()
@@ -295,7 +295,13 @@ public class map : MonoBehaviour
 
         // Save to file
         string json = JsonUtility.ToJson(saveData, true);
+#if UNITY_WEBGL && !UNITY_EDITOR
+        PlayerPrefs.SetString("gamesave", json);
+        PlayerPrefs.Save();
+#else
         File.WriteAllText(Application.persistentDataPath + "/gamesave.json", json);
+        print($"Saving to {Application.persistentDataPath}/gamesave.json");
+#endif
 
         timer.Stop();
         print($"Game saved in {timer.ElapsedMilliseconds}ms to {Application.persistentDataPath}/gamesave.json");
@@ -309,15 +315,32 @@ public class map : MonoBehaviour
 
         ClearAllExistingObjects();
 
+        GameSaveData saveData;
+#if UNITY_WEBGL && !UNITY_EDITOR
+        if (PlayerPrefs.HasKey("gamesave"))
+        {
+            string json = PlayerPrefs.GetString("gamesave");
+            saveData = JsonUtility.FromJson<GameSaveData>(json);
+        }
+        else
+        {
+            print("No save file found!");
+            manager.ui.CreateUiItemsUponNoLoad();
+            return;
+        }
+#else
         string path = Application.persistentDataPath + "/gamesave.json";
+        print($"Loading From {path}");
         if (!File.Exists(path))
         {
             print("No save file found!");
+            manager.ui.CreateUiItemsUponNoLoad();
             return;
         }
 
         string json = File.ReadAllText(path);
-        GameSaveData saveData = JsonUtility.FromJson<GameSaveData>(json);
+        saveData = JsonUtility.FromJson<GameSaveData>(json);
+#endif
 
         foreach (BeetData beet in saveData.beetData)
         {
@@ -337,7 +360,7 @@ public class map : MonoBehaviour
         manager.SetInventory(saveData.wood, saveData.oxygen, saveData.gold, saveData.treeInventory);
 
         timer.Stop();
-        print($"Game loaded in {timer.ElapsedMilliseconds}ms from {path}");
+        print($"Game loaded in {timer.ElapsedMilliseconds}ms");
     }
 
     private void ClearAllExistingObjects()
@@ -363,6 +386,20 @@ public class map : MonoBehaviour
         }
 
         splineInterface.ClearAllSplines();
+    }
+
+    public void DeleteSave()
+    {
+        string path = Application.persistentDataPath + "/gamesave.json";
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+            print("Save file deleted!");
+        }
+        else
+        {
+            print("Save file not found!");
+        }
     }
 
     #endregion

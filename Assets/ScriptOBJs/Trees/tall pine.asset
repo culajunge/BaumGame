@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3755225759bfd44913c09e0d0038a0, type: 3}
+  m_Name: tall pine
+  m_EditorClassIdentifier: 
+  treeName: Tall Pine
+  level: 5
+  treePreview: {fileID: 21300000, guid: 46417f114b1a948439a9183eb14a292d, type: 3}
+  amount: 0
+  treeOBJ: {fileID: 1740754381320706886, guid: 1c3046c10ab7cb54a916beb07d7f3100, type: 3}
+  growFactor: 2
+  growLimit: 2
+  waterConsumption: 2
+  O2Emission: 2

@@ -18,6 +18,9 @@ TagManager:
   - MainBuilding
   - WorkerTent
   - Shredder
+  - Research
+  - Sawmill
+  - Cafeteria
   layers:
   - Default
   - TransparentFX

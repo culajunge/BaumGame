@@ -4,14 +4,18 @@ using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.Splines;
+using UnityEngine.UI;
 
 public class Manager : MonoBehaviour
 {
-    [Header("Refs")] [SerializeField] UIBehavior ui;
+    [SerializeField] private bool godMode = false;
+
+    [Header("Refs")] [SerializeField] public UIBehavior ui;
     [SerializeField] Camera cam;
     [SerializeField] public indexer indexer;
     [SerializeField] public map map;
     [SerializeField] public ConnectionManager connecManager;
+    [SerializeField] public Button cafeButon;
 
     [Header("Tags")] [SerializeField] const string treeTag = "Tree";
     [SerializeField] const string grassTag = "Grass";
@@ -24,14 +28,24 @@ public class Manager : MonoBehaviour
     [SerializeField] const string bucketBoysTag = "BucketBoys";
     [SerializeField] const string shredderTag = "Shredder";
     [SerializeField] private const string workerTentTag = "WorkerTent";
+    const string cafeteriaTag = "Cafeteria";
 
     [SerializeField] public Color emptyColor;
     [SerializeField] public const string waterResourceTag = "water";
     [SerializeField] public Color waterColor;
     [SerializeField] public const string seedResourceTag = "seed";
     [SerializeField] public Color seedColor;
+    [SerializeField] public const string compostResouceTag = "Compost";
+    [SerializeField] public Color compostColor;
+    [SerializeField] public const string woodResourceTag = "Wood";
+    [SerializeField] public Color woodColor;
+    [SerializeField] public const string treeSeedResourceTag = "treeSeed";
+    [SerializeField] public Color treeSeedColor;
+
 
     [Header("Settings")] [SerializeField] public float treeGrowthSmallMaker = 0.01f;
+    [SerializeField] private float regularMannequinSpeedBoost = 10f;
+    [SerializeField] int regularMannequinSpeedBoostDuration = 5 * 60;
 
     [FormerlySerializedAs("O2CollectCycle")] [SerializeField]
     private int o2CollectCycle = 5;
@@ -57,7 +71,7 @@ public class Manager : MonoBehaviour
     private bool dismantling = false;
     private bool placingPath = false;
 
-    bool GetPointerDownOnMap()
+    public bool GetPointerDownOnMap()
     {
         if (Input.touchCount > 0)
         {
@@ -75,19 +89,23 @@ public class Manager : MonoBehaviour
         return false;
     }
 
-    bool GetPointerUpOnMap()
+    public bool GetPointerUpOnMap()
     {
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Ended)
             {
-                return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+                bool val = !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject(touch.fingerId);
+                print("Pointer Up on Map: " + val);
+                return val;
             }
         }
         else if (Input.GetMouseButtonUp(0))
         {
-            return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+            bool val = !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
+            print("Pointer Up on Map: " + val);
+            return val;
         }
 
         return false;
@@ -111,13 +129,29 @@ public class Manager : MonoBehaviour
         return false;
     }
 
+    void Save()
+    {
+        map.SaveGame();
+    }
+
 
     void Start()
     {
+        indexer.OnStart();
+
         StartCoroutine(CollectO2());
         StartCoroutine(GrowTrees());
 
         UpdateUI();
+
+        map.LoadGame();
+
+        if (godMode)
+        {
+            currentGold = 999999;
+            currentO2 = 999999;
+            currentWood = 999999;
+        }
     }
 
     void UpdateUI()
@@ -135,6 +169,11 @@ public class Manager : MonoBehaviour
     public int GetOxygen()
     {
         return currentO2;
+    }
+
+    public string GetTreeSeedTag()
+    {
+        return treeSeedResourceTag;
     }
 
     public void SetTreeInventory(List<int> treeInventory)
@@ -157,9 +196,25 @@ public class Manager : MonoBehaviour
         ui.RebuildMenus();
     }
 
+    public void AddWood(int amount)
+    {
+        currentWood += amount;
+        ui.UpdateWoodUI(currentWood);
+    }
+
     public string GetBeetTag()
     {
         return beetTag;
+    }
+
+    public string GetWoodResourceTag()
+    {
+        return woodResourceTag;
+    }
+
+    public string GetCompostResourceTag()
+    {
+        return compostResouceTag;
     }
 
     public string GetWaterResourceTag()
@@ -187,6 +242,12 @@ public class Manager : MonoBehaviour
         placingTree = true;
     }
 
+    public void AddSeeds(int amount)
+    {
+        int randomTreeID = Random.Range(0, indexer.trees.Length);
+        indexer.trees[randomTreeID].amount += amount;
+    }
+
     public TreeBehavior PlaceTreeByData(TreeData treeData, Beet beet)
     {
         TreeBehavior treeBehavior = Instantiate(indexer.trees[treeData.treeSpeciesId].treeOBJ, treeData.position,
@@ -194,6 +255,7 @@ public class Manager : MonoBehaviour
 
         treeBehavior.beet = beet;
         treeBehavior.transform.localScale = Vector3.one * treeData.growth;
+        treeBehavior.SetOxygenProduction(indexer.trees[treeData.treeSpeciesId].O2Emission);
         treeBehavior.OnPlant(treeData.treeSpeciesId);
 
         map.AddTree(treeData.treeSpeciesId, treeBehavior.gameObject);
@@ -262,10 +324,17 @@ public class Manager : MonoBehaviour
     {
         bool firstKnot = true;
 
+        int tempIndex = 0;
         foreach (KnotData knotData in pathData.knots)
         {
+            if (tempIndex == 0)
+            {
+                map.splineInterface.SetFirstPlace(true);
+            }
+
             PlacePathKnotByData(knotData, firstKnot);
             firstKnot = false;
+            tempIndex++;
         }
     }
 
@@ -531,17 +600,17 @@ public class Manager : MonoBehaviour
         GameObject obj = hit.collider.gameObject;
         string tag = obj.tag;
 
-        if (tag == treeTag)
+        if (hit.collider.TryGetComponent<TreeBehavior>(out TreeBehavior tree))
         {
-            obj.GetComponent<TreeBehavior>().OnDismantle();
+            tree.OnDismantle();
         }
-        else if (tag == buildingTag || tag == bucketBoysTag)
+        else if (hit.collider.TryGetComponent<BeetConnector>(out BeetConnector beet))
         {
-            obj.GetComponent<Building>().OnDismantle();
+            beet.OnDismantle();
         }
-        else if (tag == beetTag)
+        else if (hit.collider.TryGetComponent<Building>(out Building building))
         {
-            obj.GetComponent<Beet>().OnDismantle();
+            building.OnDismantle();
         }
         else if (tag == pathTag)
         {
@@ -580,6 +649,10 @@ public class Manager : MonoBehaviour
             currentWood += hit.collider.gameObject.GetComponent<stumpBehavior>().OnCollect();
             ui.UpdateWoodUI(currentWood);
         }
+        else if (hit.transform.CompareTag(cafeteriaTag))
+        {
+            hit.collider.gameObject.GetComponent<CafeteriaBuilding>().OnClick();
+        }
     }
 
 
@@ -588,8 +661,9 @@ public class Manager : MonoBehaviour
         indexer.trees[currentTreeID].amount--;
         ui.UpdateAmount(currentTreeID);
         map.AddTree(currentTreeID, currentTreePreview);
-
-        currentTreePreview.GetComponent<TreeBehavior>().OnPlant(currentTreeID);
+        TreeBehavior tree = currentTreePreview.GetComponent<TreeBehavior>();
+        tree.SetOxygenProduction(indexer.trees[currentTreeID].O2Emission);
+        tree.OnPlant(currentTreeID);
 
         RelinquishFromTreePlacement();
     }
@@ -661,6 +735,7 @@ public class Manager : MonoBehaviour
         {
             yield return new WaitForSeconds(tickTimeSeconds);
             map.GrowTrees();
+            Save();
         }
     }
 
@@ -683,5 +758,49 @@ public class Manager : MonoBehaviour
 
         ui.UpdateWoodUI(currentWood);
         ui.UpdateMoneyUI(currentGold);
+    }
+
+    private float regularMannequinSpeed = -1;
+
+    public void ApplyMannequinSpeedBoost()
+    {
+        SpeedBoostMannequins(regularMannequinSpeedBoost, regularMannequinSpeedBoostDuration);
+        cafeButon.interactable = false;
+    }
+
+    public void SpeedBoostMannequins(float speedBoost, float durationSeconds)
+    {
+        foreach (Mannequin man in map.GetMannequins())
+        {
+            if (regularMannequinSpeed == -1f) regularMannequinSpeed = man.speed;
+            man.speed += speedBoost;
+        }
+
+        StartCoroutine(ResetMannequinSpeedDelayed(regularMannequinSpeed, durationSeconds));
+    }
+
+    IEnumerator ResetMannequinSpeedDelayed(float speedBoost, float durationSeconds)
+    {
+        yield return new WaitForSeconds(durationSeconds);
+
+        cafeButon.interactable = true;
+        foreach (Mannequin man in map.GetMannequins())
+        {
+            man.speed = regularMannequinSpeed;
+        }
+    }
+
+    private int deleteSaveClicks = 0;
+
+    public void DeleteSaveClick()
+    {
+        deleteSaveClicks++;
+
+        if (deleteSaveClicks >= 6)
+        {
+            map.DeleteSave();
+            deleteSaveClicks = 0;
+            print("DELETED SAVE");
+        }
     }
 }

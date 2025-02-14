@@ -16,6 +16,7 @@ public class SplineInterface : MonoBehaviour
     [SerializeField] map map;
     [HideInInspector] public Spline currentSpline;
     [SerializeField] private float knotGroundOffset = 1f;
+    [SerializeField] float pathPreviewGroundOffset = 0.2f;
     [SerializeField] private int splineConnectionResolution = 10;
     [SerializeField] private int splineConnectionIterations = 2;
     [SerializeField] int mannequinsPerSpline = 3;
@@ -56,6 +57,11 @@ public class SplineInterface : MonoBehaviour
     public bool isFirstPlace()
     {
         return firstPlace;
+    }
+
+    public void SetFirstPlace(bool val)
+    {
+        firstPlace = val;
     }
 
     public void OnPathPlaceMode(bool val)
@@ -158,7 +164,8 @@ public class SplineInterface : MonoBehaviour
                 splineContainer.LinkKnots(currentKnotIndex, targetKnotIndex);
 
                 intersectionCollider intersectionCol =
-                    Instantiate(intersectionColliderPrefab, nearest, Quaternion.identity, transform)
+                    Instantiate(intersectionColliderPrefab, (Vector3)nearest,
+                            Quaternion.identity, transform)
                         .GetComponent<intersectionCollider>();
 
                 float endingPointProgress = firstPlace ? 0f : 1f;
@@ -174,13 +181,10 @@ public class SplineInterface : MonoBehaviour
             latestKnot = AddKnot(splineIndex, splineContainer.Splines[splineIndex].Count, position, normal, offset);
         }
 
-        if (SpawnMannequinsDelayed && knotsPlacedPerPathPlaceMode == 1)
+        bool debugNeverSpawnDelayedMannequins = false;
+        if (delayedMannequins.Count > 0 && !debugNeverSpawnDelayedMannequins)
         {
-            SpawnMannequinsDelayed = false;
-            SpawnMannequins(currentSpline, delayedMannequinProgress, delayedMannequinAmount);
-            delayedMannequinSpline = null;
-            delayedMannequinProgress = 0f;
-            delayedMannequinAmount = 0;
+            SpawnDelayedMannequins();
         }
 
         knotsPlacedPerPathPlaceMode++;
@@ -190,6 +194,19 @@ public class SplineInterface : MonoBehaviour
         HandleFirstPlaceMarker(position, normal, offset);
 
         return splineIndex;
+    }
+
+    public void SpawnDelayedMannequins()
+    {
+        List<DelayedMannequin> delayedMannequinsTemp = delayedMannequins;
+        foreach (DelayedMannequin mannequin in delayedMannequinsTemp)
+        {
+            SpawnMannequins(mannequin.spline, mannequin.progress, mannequin.amount);
+        }
+
+        delayedMannequins.Clear();
+
+        print("Spawned delayed mannequins");
     }
 
     GameObject FirstPlaceMarker;
@@ -338,14 +355,14 @@ public class SplineInterface : MonoBehaviour
     int delayedMannequinAmount;
     private bool SpawnMannequinsDelayed = false;
 
-    public int? SpawnMannequinsSafelyOnCurrentSpline(Spline spline, float progress, int amount, bool isStart)
+    List<DelayedMannequin> delayedMannequins = new List<DelayedMannequin>();
+
+    public int? SpawnMannequinsSafelyOnCurrentSpline(ref Spline spline, float progress, int amount, bool isStart)
     {
         if (isStart)
         {
-            delayedMannequinSpline = spline;
-            delayedMannequinProgress = progress;
-            delayedMannequinAmount = amount;
-            SpawnMannequinsDelayed = true;
+            delayedMannequins.Add(new DelayedMannequin(ref spline, amount, progress, isStart));
+            print("Delayed Mannequins");
             return null;
         }
 
@@ -354,6 +371,8 @@ public class SplineInterface : MonoBehaviour
 
     public int SpawnMannequins(Spline spline, float progress, int amount)
     {
+        if (spline.Count == 0 || spline.Count == 1) Debug.LogError($"Spline has only {spline.Count} knots");
+
         int firstMannequinIndex = -1;
         for (int i = 0; i < amount; i++)
         {
@@ -376,5 +395,21 @@ public class SplineInterface : MonoBehaviour
         }
 
         return firstMannequinIndex;
+    }
+}
+
+class DelayedMannequin
+{
+    public Spline spline; //TODO add ref field (only c# 10)
+    public int amount;
+    public float progress;
+    public bool isStart;
+
+    public DelayedMannequin(ref Spline spline, int amount, float progress, bool isStart)
+    {
+        this.spline = spline;
+        this.amount = amount;
+        this.progress = progress;
+        this.isStart = isStart;
     }
 }

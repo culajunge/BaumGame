@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df3755225759bfd44913c09e0d0038a0, type: 3}
+  m_Name: orange birch
+  m_EditorClassIdentifier: 
+  treeName: LOng orange Birch ig
+  level: 3
+  treePreview: {fileID: 21300000, guid: b08908ff614d1b04785393b485e406f9, type: 3}
+  amount: 0
+  treeOBJ: {fileID: 1111523938249533675, guid: 78b3396614561b84180deaeebb0848be, type: 3}
+  growFactor: 10
+  growLimit: 1.6
+  waterConsumption: 3
+  O2Emission: 3

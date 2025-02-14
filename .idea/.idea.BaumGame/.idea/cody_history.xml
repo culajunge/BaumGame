@@ -2347,6 +2347,474 @@
                   </llm>
                 </llm>
               </chat>
+              <chat>
+                <internalId value="1558da5f-b058-4c97-aea0-0ea2a446af62" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="903c3add-6709-4886-b24a-d525cd065c47" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="8a4d5fe5-67c0-441e-be97-0b30fc72a6f4" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="5be77d16-0fa7-4ab9-aed8-e616c4fdee3e" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="d59348fa-2d67-41c8-abfb-32e9626737e9" />
+              </chat>
+              <chat>
+                <internalId value="0abe830c-f96d-4f50-a23d-509d36b0b548" />
+              </chat>
+              <chat>
+                <internalId value="3c74db24-9252-4d3e-8fef-8e0b2f6c1307" />
+              </chat>
+              <chat>
+                <internalId value="57956f03-db85-4bb7-a633-593a625e8855" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="8898c629-6312-4892-be2c-d90a5a90d85c" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="500f1d69-0b57-4941-9960-dc57011033f5" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="fa851269-4cce-40e2-83b8-b06c7163f2ad" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="8d64fb1a-7b0a-4da3-a23e-b2a66fb5a33d" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="ce63a3bd-c2e2-4df7-8e93-9a7d5ef45fdf" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="8877715a-a8c0-471a-8f27-609de6a5637b" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="8b6c12cd-3468-4ae6-91c9-3eb68e0e0e16" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="59df27da-8dd7-46d2-baf6-5671ab4223e7" />
+              </chat>
+              <chat>
+                <internalId value="61b27c56-6c52-43b4-9e03-920b8844ab03" />
+              </chat>
+              <chat>
+                <internalId value="4daa7823-2638-454c-8b51-05bbc4043d62" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="d6de0d56-22b9-49df-8064-718316400ef9" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+                <messages>
+                  <list>
+                    <message>
+                      <speaker value="HUMAN" />
+                      <text value="hello" />
+                    </message>
+                    <message>
+                      <speaker value="ASSISTANT" />
+                      <text value="Hello! I'm Cody, an AI coding assistant created by Sourcegraph. How can I help you with coding or development today? Whether you have questions about a specific programming language, need help debugging code, or want to discuss software design concepts, I'm here to assist. What would you like to work on?" />
+                    </message>
+                    <message>
+                      <speaker value="HUMAN" />
+                      <text value="AddCircularCap(startPos, -startDir, startUpVector, width, segments, angleStep, false);&#10;&#10;            // Add end cap&#10;            AddCircularCap(endPos, endDir, endUpVector, width, segments, angleStep, false);&#10;        }&#10;&#10;        void AddCircularCap(Vector3 centerPos, Vector3 direction, Vector3 up, float width, int segments,&#10;            float angleStep, bool isStartCap)&#10;        {&#10;            Vector3 right = Vector3.Cross(up, direction.normalized).normalized;&#10;            Vector3 normalizedDirection = direction.normalized;&#10;            var prevVertCount = m_Positions.Count;&#10;&#10;            // Center vertex&#10;            m_Positions.Add(centerPos);&#10;            m_Normals.Add(up);&#10;            m_Textures.Add(new Vector2(0.5f, 1f)); //isStartCap ? 0f : 1f));&#10;&#10;            // Create vertices around the cap&#10;            for (int i = 0; i &amp;lt;= segments; i++)&#10;            {&#10;                float angle = i * angleStep;&#10;                Vector3 offset = right * Mathf.Cos(angle) * width + normalizedDirection * Mathf.Sin(angle) * width;&#10;&#10;                m_Positions.Add(centerPos + offset);&#10;                m_Normals.Add(up);&#10;                m_Textures.Add(new Vector2(&#10;                    (Mathf.Cos(angle) + 1f) * 0.5f,&#10;                    isStartCap ? Mathf.Sin(angle) * 0.5f : 1f - Mathf.Sin(angle) * 0.5f&#10;                ));&#10;            }&#10;&#10;            // Add triangles for cap&#10;            for (int i = 0; i &amp;lt; segments; i++)&#10;            {&#10;                if (isStartCap)&#10;                {&#10;                    m_Indices.Add(prevVertCount);&#10;                    m_Indices.Add(prevVertCount + i + 1);&#10;                    m_Indices.Add(prevVertCount + i + 2);&#10;                }&#10;                else&#10;                {&#10;                    m_Indices.Add(prevVertCount);&#10;                    m_Indices.Add(prevVertCount + i + 2);&#10;                    m_Indices.Add(prevVertCount + i + 1);&#10;                }&#10;            }&#10;        }&#10;&#10;// Mapping from triangle index to spline index&#10;        private Dictionary&amp;lt;int, int&amp;gt; triangleToSplineMap = new Dictionary&amp;lt;int, int&amp;gt;();&#10;&#10;also add the triangles from the generated spline caps to the dictionary like its done here:&#10;for (int i = 0, n = prevVertexCount; i &amp;lt; triangleCount; i += 6, n += 2)&#10;            {&#10;                m_Indices.Add(n + 2);&#10;                m_Indices.Add(n + 1);&#10;                m_Indices.Add(n + 0);&#10;                m_Indices.Add(n + 2);&#10;                m_Indices.Add(n + 3);&#10;                m_Indices.Add(n + 1);&#10;&#10;                // Map triangles to the spline index&#10;                int triangleBaseIndex = (m_Indices.Count / 3) - 2; // Calculate the base triangle index&#10;                triangleToSplineMap[triangleBaseIndex] = splineIndex; //first triangle&#10;                triangleToSplineMap[triangleBaseIndex + 1] = splineIndex; // Second triangle&#10;            }" />
+                    </message>
+                    <message>
+                      <speaker value="ASSISTANT" />
+                      <text value="Certainly! I'll modify the `AddCircularCap` method to add the triangles from the generated spline caps to the `triangleToSplineMap` dictionary. Here's the updated method:&#10;&#10;```csharp&#10;void AddCircularCap(Vector3 centerPos, Vector3 direction, Vector3 up, float width, int segments,&#10;    float angleStep, bool isStartCap, int splineIndex)&#10;{&#10;    Vector3 right = Vector3.Cross(up, direction.normalized).normalized;&#10;    Vector3 normalizedDirection = direction.normalized;&#10;    var prevVertCount = m_Positions.Count;&#10;&#10;    // Center vertex&#10;    m_Positions.Add(centerPos);&#10;    m_Normals.Add(up);&#10;    m_Textures.Add(new Vector2(0.5f, 1f));&#10;&#10;    // Create vertices around the cap&#10;    for (int i = 0; i &lt;= segments; i++)&#10;    {&#10;        float angle = i * angleStep;&#10;        Vector3 offset = right * Mathf.Cos(angle) * width + normalizedDirection * Mathf.Sin(angle) * width;&#10;&#10;        m_Positions.Add(centerPos + offset);&#10;        m_Normals.Add(up);&#10;        m_Textures.Add(new Vector2(&#10;            (Mathf.Cos(angle) + 1f) * 0.5f,&#10;            isStartCap ? Mathf.Sin(angle) * 0.5f : 1f - Mathf.Sin(angle) * 0.5f&#10;        ));&#10;    }&#10;&#10;    // Add triangles for cap&#10;    for (int i = 0; i &lt; segments; i++)&#10;    {&#10;        int triangleBaseIndex = m_Indices.Count / 3;&#10;        &#10;        if (isStartCap)&#10;        {&#10;            m_Indices.Add(prevVertCount);&#10;            m_Indices.Add(prevVertCount + i + 1);&#10;            m_Indices.Add(prevVertCount + i + 2);&#10;        }&#10;        else&#10;        {&#10;            m_Indices.Add(prevVertCount);&#10;            m_Indices.Add(prevVertCount + i + 2);&#10;            m_Indices.Add(prevVertCount + i + 1);&#10;        }&#10;&#10;        // Map triangle to the spline index&#10;        triangleToSplineMap[triangleBaseIndex] = splineIndex;&#10;    }&#10;}&#10;```&#10;&#10;Now, when you call the `AddCircularCap` method, you need to pass the `splineIndex` as an additional parameter. For example:&#10;&#10;```csharp&#10;// Add start cap&#10;AddCircularCap(startPos, -startDir, startUpVector, width, segments, angleStep, true, splineIndex);&#10;&#10;// Add end cap&#10;AddCircularCap(endPos, endDir, endUpVector, width, segments, angleStep, false, splineIndex);&#10;```&#10;&#10;This modification will add each triangle from the circular caps to the `triangleToSplineMap` dictionary, associating it with the correct spline index. Each cap will generate `segments` number of triangles, and each of these triangles will be mapped to the spline index." />
+                    </message>
+                  </list>
+                </messages>
+                <updatedAt value="2025-02-12T17:40:00.8933769" />
+              </chat>
+              <chat>
+                <internalId value="b58d62b7-853b-444d-a771-e4dd20b7aae4" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="60fcc6ff-960c-40f7-be6f-2ad21b8c83bd" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="6fc1793d-2255-4ab8-95df-82b0e75ce0fd" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
+              <chat>
+                <internalId value="079d8514-f2a7-4ef9-84f9-de57e9247fd7" />
+                <llm>
+                  <llm>
+                    <model value="anthropic/claude-3-5-sonnet-20240620" />
+                    <provider value="Anthropic" />
+                    <tags>
+                      <list>
+                        <option value="gateway" />
+                        <option value="accuracy" />
+                        <option value="recommended" />
+                        <option value="free" />
+                      </list>
+                    </tags>
+                    <title value="Claude 3.5 Sonnet" />
+                    <usage>
+                      <list>
+                        <option value="chat" />
+                        <option value="edit" />
+                      </list>
+                    </usage>
+                  </llm>
+                </llm>
+              </chat>
             </list>
           </chats>
           <defaultLlm>

@@ -36,6 +36,15 @@ public class UITreeItem : MonoBehaviour, IPointerDownHandler
 
     public void OnInstance()
     {
+        SetImageWidthToSpriteWidth();
         preview.sprite = previewImg;
+    }
+
+    void SetImageWidthToSpriteWidth()
+    {
+        var sizeDelta = preview.rectTransform.sizeDelta;
+        float spriteFactor = sizeDelta.y / previewImg.texture.height;
+        sizeDelta = new Vector2(previewImg.texture.width * spriteFactor, sizeDelta.y);
+        preview.rectTransform.sizeDelta = sizeDelta;
     }
 }

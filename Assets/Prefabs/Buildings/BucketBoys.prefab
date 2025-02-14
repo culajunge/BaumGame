@@ -51,6 +51,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -477,7 +478,7 @@ MonoBehaviour:
     isConnected: 0
   buildingIndex: 0
   buildingID: 0
-  waterOutputPerTick: 2
+  waterOutputPerTick: 4
   waterLevel: {fileID: 4784178014000162001}
 --- !u!65 &5808686252429263053
 BoxCollider:

@@ -230,7 +230,7 @@ namespace Unity.Splines.Examples
             }
         }
 
-        void AddRoundedCaps(Spline spline, float width, Quaternion capRotation)
+        void AddRoundedCaps(Spline spline, float width, Quaternion capRotation, int splineIndex)
         {
             SplineUtility.Evaluate(spline, 0f, out var startPos, out var startDir, out var startUp);
             SplineUtility.Evaluate(spline, 1f, out var endPos, out var endDir, out var endUp);
@@ -246,14 +246,14 @@ namespace Unity.Splines.Examples
             Vector3 consistentUp = Vector3.up;
 
             // Add start cap
-            AddCircularCap(startPos, -startDir, startUpVector, width, segments, angleStep, false);
+            AddCircularCap(startPos, -startDir, startUpVector, width, segments, angleStep, false, splineIndex);
 
             // Add end cap
-            AddCircularCap(endPos, endDir, endUpVector, width, segments, angleStep, false);
+            AddCircularCap(endPos, endDir, endUpVector, width, segments, angleStep, false, splineIndex);
         }
 
         void AddCircularCap(Vector3 centerPos, Vector3 direction, Vector3 up, float width, int segments,
-            float angleStep, bool isStartCap)
+            float angleStep, bool isStartCap, int splineIndex)
         {
             Vector3 right = Vector3.Cross(up, direction.normalized).normalized;
             Vector3 normalizedDirection = direction.normalized;
@@ -281,6 +281,7 @@ namespace Unity.Splines.Examples
             // Add triangles for cap
             for (int i = 0; i < segments; i++)
             {
+                int triangleBaseIndex = m_Indices.Count / 3;
                 if (isStartCap)
                 {
                     m_Indices.Add(prevVertCount);
@@ -293,6 +294,8 @@ namespace Unity.Splines.Examples
                     m_Indices.Add(prevVertCount + i + 2);
                     m_Indices.Add(prevVertCount + i + 1);
                 }
+
+                triangleToSplineMap[triangleBaseIndex] = splineIndex;
             }
         }
 
@@ -377,7 +380,7 @@ namespace Unity.Splines.Examples
 
             if (roundCaps)
             {
-                AddRoundedCaps(spline, roadWidth, Quaternion.Euler(capRotationOffset));
+                AddRoundedCaps(spline, roadWidth, Quaternion.Euler(capRotationOffset), splineIndex);
             }
 
             for (int i = 0, n = prevVertexCount; i < triangleCount; i += 6, n += 2)

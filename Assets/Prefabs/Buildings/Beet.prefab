@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6353644863689792537
 Transform:
@@ -49,7 +49,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3972517631380300746
 Transform:
@@ -80,7 +80,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1691298044378098308
 Transform:
@@ -111,7 +111,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6033527179502621129
 Transform:
@@ -146,7 +146,7 @@ GameObject:
   m_TagString: Beet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4081759332378288067
 Transform:
@@ -268,7 +268,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1369755297572140940
 Transform:
@@ -305,7 +305,7 @@ GameObject:
   m_TagString: Beet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7451738398050868889
 Transform:
@@ -362,7 +362,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7300755527687726743
 Transform:
@@ -431,6 +431,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fence_corner (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8a0f422ec4b9d8d4692a7cc99ce842cd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -449,6 +453,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4081759332378288067}
     m_Modifications:
+    - target: {fileID: 1646508454805928834, guid: 6f0b40fc9412f99499b033742cd661f0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1872638915656734456, guid: 6f0b40fc9412f99499b033742cd661f0, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.8
@@ -505,6 +513,14 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2325364133556149532, guid: 6f0b40fc9412f99499b033742cd661f0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2867482310114133152, guid: 6f0b40fc9412f99499b033742cd661f0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7473634654908586977, guid: 6f0b40fc9412f99499b033742cd661f0, type: 3}
       propertyPath: m_Name
       value: WaterInformant
@@ -512,6 +528,10 @@ PrefabInstance:
     - target: {fileID: 7473634654908586977, guid: 6f0b40fc9412f99499b033742cd661f0, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7473634654908586977, guid: 6f0b40fc9412f99499b033742cd661f0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -580,6 +600,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fence_corner (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8a0f422ec4b9d8d4692a7cc99ce842cd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -642,6 +666,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: fence_corner
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8a0f422ec4b9d8d4692a7cc99ce842cd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -703,6 +731,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 8a0f422ec4b9d8d4692a7cc99ce842cd, type: 3}
       propertyPath: m_Name
       value: fence_corner (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8a0f422ec4b9d8d4692a7cc99ce842cd, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
